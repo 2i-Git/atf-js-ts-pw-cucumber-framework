@@ -1,0 +1,108 @@
+{
+  "Combined Test - Full": {
+    "prefix": "nftest-full",
+    "body": [
+      "import { test } from \"@fixtures/combined\";",
+      "",
+      "test.use({});",
+      "",
+      "test(",
+      "\"$1\",",
+      "{tag: [] },",
+      "asyc ({$2}) => {$3}",
+      ");"
+    ]
+  },
+  "Combined Test": {
+    "prefix": "nftest",
+    "body": ["test(", "\"$1\",", "{tag: [] },", "asyc ({$2}) => {$3}", ");"]
+  },
+  "Combined Test - Full with Expect": {
+    "prefix": "nftestexpect-full",
+    "body": [
+      "import { test, extpect } from \"@fixtures/combined\";",
+      "",
+      "test.use({});",
+      "",
+      "test(",
+      "\"$1\",",
+      "{tag: [] },",
+      "asyc ({$2}) => {$3}",
+      ");"
+    ]
+  },
+  "Create a Component Object Model (COM)": {
+    "scope": "typescript",
+    "prefix": "nfpw-com",
+    "body": [
+      "import { baseComponent } from \"@components\";",
+      "import { Locator } from \"@playwright/test\";",
+      "",
+      "export class ${1:$TM_FILENAME_BASE} extends baseComponent {",
+      "  constructor(locator: Locator) {",
+      "    super(locator);",
+      "  }",
+      "",
+      "  $2",
+      "}"
+    ],
+    "description": "Create a new Playwright COM inside the current file"
+  },
+  "Create a Page Object Model (POM)": {
+    "scope": "typescript",
+    "prefix": "nfpw-pom",
+    "body": [
+      "import { basePage } from \"@pages\";",
+      "import { Page } from \"@playwright/test\";",
+      "",
+      "export class ${1:$TM_FILENAME_BASE} extends basePage {",
+      "  constructor(page: Page) {",
+      "    super(page);",
+      "  }",
+      "",
+      "  $2",
+      "}"
+    ],
+    "description": "Create a new Playwright POM inside the current file"
+  },
+  "COM public element": {
+    "scope": "typescript",
+    "prefix": "nfpw-cpub",
+    "body": "public ${1:property} = this.${2:container}.${3:locator}($4)"
+  },
+  "COM private element": {
+    "scope": "typescript",
+    "prefix": "nfpw-cpub",
+    "body": "public ${1:property} = this.${2:container}.${3:locator}($4)"
+  },
+  "POM public element": {
+    "scope": "typescript",
+    "prefix": "nfpw-ppub",
+    "body": "public ${1:property} = this.${2:page}.${3:locator}($4)"
+  },
+  "POM private element": {
+    "scope": "typescript",
+    "prefix": "nfpw-ppub",
+    "body": "public ${1:property} = this.${2:page}.${3:locator}($4)"
+  },
+  "Public method": {
+    "scope": "typescript",
+    "prefix": "nfpw-pub-met",
+    "body": ["public ${1:method}(${2}){", "  ${3}", "}"]
+  },
+  "Private method": {
+    "scope": "typescript",
+    "prefix": "nfpw-pri-met",
+    "body": ["private ${1:method}(${2}){", "  ${3}", "}"]
+  },
+  "Public async method": {
+    "scope": "typescript",
+    "prefix": "nfpw-pub-amet",
+    "body": ["public async ${1:method}(${2}){", "  ${3}", "}"]
+  },
+  "Private async method": {
+    "scope": "typescript",
+    "prefix": "nfpw-pri-amet",
+    "body": ["private async ${1:method}(${2}){", "  ${3}", "}"]
+  }
+}
