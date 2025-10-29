@@ -67,45 +67,14 @@ If you don’t see version numbers or get an error,
 
 ### Using GitHub
 
-1. Open this repo on [Github](http://www.github.com/2i-Git/js-ts-playwright-framework)
-2. Click the green "Use this template" button in the top right hand corner of the screen
-   - If you don't see this button, you need to log into GitHub
-3. Select "Create a new repository"
-4. Ensure Owner is "2i Git"
-5. Enter new repository name and description appropriately
-6. Select 'Private' _(selecting 'public' here would result in the repository being publicly
-   available to **everyone** on the internet)_
-7. Click 'Create repository'
-8. Clone repo to local machine [(see GitHub Desktop)](https://github.com/apps/desktop)
-9. Open repo in VSCode
-10. Add all [VS Code Extensions](#VSCode-Extensions)
-11. Run `npm install`
-12. Run `npx playwright install`
-13. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
+1. Clone repo to local machine [(see GitHub Desktop)](https://github.com/apps/desktop)
+2. Open repo in VSCode
+3. Add all [VS Code Extensions](#VSCode-Extensions)
+4. Run `npm install`
+5. Run `npx playwright install`
+6. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
     everything is setup correctly
 
-### Using alternative Git hosting platform
-
-1. Create a new repo with your host of choice
-2. Clone that new repo to your local machine
-3. Open this repo on [Github](http://www.github.com/2i-Git/js-ts-playwright-framework)
-4. Click on '<> Code'
-5. Click 'Download ZIP'
-6. Unzip the project
-7. Copy files from downloaded project folder into cloned directory
-8. Open repo in VSCode
-9. Add all [VS Code Extensions](#VSCode-Extensions)
-10. Run `npm install`
-11. Run `npx playwright install`
-12. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
-    everything is setup correctly
-13. Commit new files to repo and push back to server
-
-<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
-
-## Install into existing project
-
-**Only do this with permission from the team leader.**
 
 ### npm modules
 
