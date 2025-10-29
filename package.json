@@ -14,8 +14,8 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^8.57.0",
-    "@playwright/test": "^1.54.2",
-    "@types/node": "^20.19.11",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^20.19.24",
     "dotenv": "^16.6.1",
     "eslint": "^8.57.0",
     "globals": "^15.15.0",
