@@ -1,3 +1,5 @@
+// tests/wikipedia.spec.ts
+// This file contains the Wikipedia test suite
 import { test, expect } from "@playwright/test";
 import { WIKI_CASES } from "../models/wiki-data";
 import { WikiSteps } from "../steps/wiki-steps";
@@ -16,11 +18,8 @@ test.describe("Wikipedia — query topics and assert words", () => {
         expect.soft(title.length, "Article title should be present").toBeGreaterThan(0);
       });
 
-      await test.step(`Assert contains: ${c.mustContain.join(", ")}`, async () => {
-        const text = await steps.readArticleText();
-        for (const w of c.mustContain) {
-          expect.soft(text, `Missing word: ${w}`).toContain(w.toLowerCase());
-        }
+      await test.step(`Assert article contains required words`, async () => {
+        await steps.assertArticleContainsWords(c.mustContain);
       });
     });
   }

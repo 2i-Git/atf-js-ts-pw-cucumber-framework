@@ -1,3 +1,5 @@
+// pages/base.ts
+// This file contains the base class for all pages
 import { Page, Locator } from "@playwright/test";
 
 export class BasePage {
@@ -36,12 +38,9 @@ export class BasePage {
     ];
 
     for (const loc of locators) {
-      try {
-        if (await loc.first().isVisible()) {
-          await loc.first().click();
-        }
-      } catch {
-        // ignore – banner may not exist
+      const candidate = loc.first();
+      if (await candidate.isVisible({ timeout: 500 }).catch(() => false)) {
+        await candidate.click().catch(() => { });
       }
     }
   }

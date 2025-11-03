@@ -1,3 +1,6 @@
+// pages/wikipedia.page.ts
+// This file contains the Wikipedia page object model
+
 import { expect } from "@playwright/test";
 import { BasePage } from "./base";
 
