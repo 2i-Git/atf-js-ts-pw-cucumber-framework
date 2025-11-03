@@ -1,25 +1,37 @@
 import { test, expect } from '@playwright/test';
-import { searchGovUK } from '@helpers/govUKhelpers';
+import { GovUKSearchPage } from '@pages/GovUKSearchPage';
 
 test.describe('gov.uk search', () => {
   test('User can search for "passport"', async ({ page }) => {
-    await searchGovUK(page, 'passport');
+    const searchPage = new GovUKSearchPage(page);
 
-    const bodyText = await page.textContent('body');
+    await searchPage.goto();
+    await searchPage.rejectCookiesIfVisible();
+    await searchPage.search('passport');
+
+    const bodyText = await searchPage.getBodyText();
     expect(bodyText?.toLowerCase()).toContain('passport');
   });
 
   test('User can search for "driving licence"', async ({ page }) => {
-    await searchGovUK(page, 'driving licence');
+    const searchPage = new GovUKSearchPage(page);
 
-    const bodyText = await page.textContent('body');
+    await searchPage.goto();
+    await searchPage.rejectCookiesIfVisible();
+    await searchPage.search('driving licence');
+
+    const bodyText = await searchPage.getBodyText();
     expect(bodyText?.toLowerCase()).toContain('driving');
   });
 
   test('User can search for "visa"', async ({ page }) => {
-    await searchGovUK(page, 'visa');
+    const searchPage = new GovUKSearchPage(page);
 
-    const bodyText = await page.textContent('body');
+    await searchPage.goto();
+    await searchPage.rejectCookiesIfVisible();
+    await searchPage.search('visa');
+
+    const bodyText = await searchPage.getBodyText();
     expect(bodyText?.toLowerCase()).toContain('visa');
   });
 });
