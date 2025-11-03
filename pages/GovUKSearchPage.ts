@@ -1,21 +1,21 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect } from "@playwright/test";
 
 export class GovUKSearchPage {
   readonly page: Page;
-  readonly searchInput: ReturnType<Page['getByRole']>;
-  readonly searchButton: ReturnType<Page['getByRole']>;
-  readonly rejectCookiesButton: ReturnType<Page['getByRole']>;
+  readonly searchInput: ReturnType<Page["getByRole"]>;
+  readonly searchButton: ReturnType<Page["getByRole"]>;
+  readonly rejectCookiesButton: ReturnType<Page["getByRole"]>;
 
   constructor(page: Page) {
     this.page = page;
-    this.searchInput = page.getByRole('combobox', { name: 'Search' });
-    this.searchButton = page.getByRole('button', { name: 'Search GOV.UK' });
-    this.rejectCookiesButton = page.getByRole('button', { name: 'Reject additional cookies' });
+    this.searchInput = page.getByRole("combobox", { name: "Search" });
+    this.searchButton = page.getByRole("button", { name: "Search GOV.UK" });
+    this.rejectCookiesButton = page.getByRole("button", { name: "Reject additional cookies" });
   }
 
   // go to search page
   async goto() {
-    await this.page.goto('https://www.gov.uk/');
+    await this.page.goto("https://www.gov.uk/");
   }
 
   // reject optional cookies
@@ -34,6 +34,6 @@ export class GovUKSearchPage {
 
   //get body text for assertion
   async getBodyText(): Promise<string | null> {
-    return this.page.textContent('body');
+    return this.page.textContent("body");
   }
 }
