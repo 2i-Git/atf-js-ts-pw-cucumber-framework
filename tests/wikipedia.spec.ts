@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 import { WIKI_CASES } from "../models/wiki-data";
 import { WikiSteps } from "../steps/wiki-steps";
 
-test.describe("Wikipedia — query topics and assert words", {tag: ['@wikiSearch']}, () => {
+test.describe("Wikipedia — query topics and assert words", { tag: ["@wikiSearch"] }, () => {
   for (const c of WIKI_CASES) {
     test(`Topic: ${c.topic}`, async ({ page }) => {
       const steps = new WikiSteps(page);
