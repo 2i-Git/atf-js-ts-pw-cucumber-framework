@@ -138,6 +138,11 @@ These extensions are required to allow VSCode to interact with the npm modules i
 
 - `npx playwright test` - Runs Playwright’s test runner to execute your browser-based end-to-end
   tests and report results.
+- `npx playwright test --grep "@tag"` - Only runs tests tagged with `@tag`.
+- `npx playwright test --grep-invert "@tag"` - Runs all tests except those tagged with `@tag`.  
+  ⚠️ Note: tests tagged `@ignore` are always excluded by default. If you use `--grep-invert` in the
+  CLI, you need to explicitly include `@ignore` to still exclude them, e.g.:
+  `--grep-invert "@tag|@ignore"`.
 - `npm run lint` - Runs the linter (e.g., ESLint) to check your code for style issues and potential
   errors based on your linting rules.
 - `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
