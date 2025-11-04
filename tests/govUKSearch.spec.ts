@@ -7,7 +7,7 @@ const searchTerms = [
   { query: "visa", expected: "visa" },
 ];
 
-test.describe("gov.uk search", () => {
+test.describe("gov.uk search", {tag: ['@govSearch']} ,() => {
   for (const { query, expected } of searchTerms) {
     test(`User can search for "${query}"`, async ({ page }) => {
       const searchPage = new GovUKSearchPage(page);

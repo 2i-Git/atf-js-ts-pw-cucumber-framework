@@ -9,6 +9,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
+  grepInvert: /@ignore/, // always skip these by default
   use: {
     trace: process.env.CI ? "on-first-retry" : "on",
     headless: process.env.CI ? true : false,
