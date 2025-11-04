@@ -40,7 +40,7 @@ export class BasePage {
     for (const loc of locators) {
       const candidate = loc.first();
       if (await candidate.isVisible({ timeout: 500 }).catch(() => false)) {
-        await candidate.click().catch(() => { });
+        await candidate.click().catch(() => {});
       }
     }
   }
