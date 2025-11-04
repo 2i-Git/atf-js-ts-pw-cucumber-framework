@@ -33,6 +33,6 @@ export class GovUKSearchPage {
   }
 
   async getResultsText(): Promise<string | null> {
-  return this.page.textContent(".gem-c-document-list");
-}
+    return this.page.textContent(".gem-c-document-list");
+  }
 }
