@@ -6,7 +6,12 @@
   "scripts": {
     "lint": "eslint .",
     "format:write": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "test": "playwright test",
+    "test:allure": "rimraf allure-results && playwright test --reporter=allure-playwright",
+    "allure:generate": "powershell -Command \"& \\\"$PWD\\node_modules\\allure-commandline\\dist\\bin\\allure.bat\\\" generate .\\allure-results --clean -o .\\allure-report\"",
+    "allure:open": "powershell -Command \"& \\\"$PWD\\node_modules\\allure-commandline\\dist\\bin\\allure.bat\\\" open .\\allure-report\"",
+    "clean:reports": "rimraf allure-results && rimraf allure-report"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +27,7 @@
     "eslint": "^8.57.0",
     "globals": "^15.15.0",
     "prettier": "^3.6.2",
+    "rimraf": "^6.1.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.18.0"
   },
