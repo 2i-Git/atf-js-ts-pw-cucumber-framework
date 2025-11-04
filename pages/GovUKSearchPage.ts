@@ -32,8 +32,7 @@ export class GovUKSearchPage {
     await expect(this.page).toHaveURL(/search/);
   }
 
-  //get body text for assertion
-  async getBodyText(): Promise<string | null> {
-    return this.page.textContent("body");
-  }
+  async getResultsText(): Promise<string | null> {
+  return this.page.textContent(".gem-c-document-list");
+}
 }

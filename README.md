@@ -73,8 +73,7 @@ If you don’t see version numbers or get an error,
 4. Run `npm install`
 5. Run `npx playwright install`
 6. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
-    everything is setup correctly
-
+   everything is setup correctly
 
 ### npm modules
 

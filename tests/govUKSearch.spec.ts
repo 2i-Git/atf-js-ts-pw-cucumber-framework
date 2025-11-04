@@ -16,7 +16,7 @@ test.describe("gov.uk search", () => {
       await searchPage.rejectCookiesIfVisible();
       await searchPage.search(query);
 
-      const bodyText = await searchPage.getBodyText();
+      const bodyText = await searchPage.getResultsText();
       expect(bodyText?.toLowerCase()).toContain(expected);
     });
   }
