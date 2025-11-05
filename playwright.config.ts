@@ -8,7 +8,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: [["allure-playwright"]],
   grepInvert: /@ignore/, // always skip these by default
   use: {
     trace: process.env.CI ? "on-first-retry" : "on",
