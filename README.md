@@ -40,6 +40,7 @@ maintained by 2i Testing.
       - [Guard Clauses](#guard-clauses)
   - [Code Snippets](#code-snippets)
   - [Release Notes](#release-notes)
+  - [Allure Report](#allure-reporting)
     - [Version 0.1](#version-01)
     - [Version 0.2](#version-02)
     - [Version 0.3](#version-03)
@@ -326,6 +327,82 @@ Tabbing through methods start with the method name, then the arguments, then the
   - `nftestexpect-full` - Same as `nftest-full` plus imports `expect` from `@fixtures/combined`
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## Allure Reporting
+
+Allure Reporting has been integrated into this framework to replace the default Playwright HTML
+reporter.  
+It provides an **interactive and visually rich** way to analyse your test runs, attachments, steps,
+and failure details.
+
+---
+
+## Installation
+
+Before running the commands below, ensure the required dependencies are installed:
+
+npm install -D allure-playwright allure-commandline rimraf
+
+- **allure-playwright** – integrates Allure with Playwright’s test runner.
+- **allure-commandline** – provides the CLI for generating and opening Allure reports.
+- **rimraf** – safely removes folders (used for cleaning old results across all platforms).
+
+> **Note:** Allure requires **Java** to generate reports. Verify it’s installed by running:
+
+> java -version
+
+## Available Scripts
+
+| Command                   | Description                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `npm run test:allure`     | Cleans any previous results and runs all Playwright tests using the Allure reporter.                     |
+| `npm run allure:generate` | Generates a new Allure HTML report from the latest test results.                                         |
+| `npm run allure:open`     | Opens the generated Allure report in your default browser.                                               |
+| `npm run clean:reports`   | Removes all previous `allure-results` and `allure-report` folders.                                       |
+| `npm run allure:full`     | Performs a full cycle: cleans old results, runs tests, generates the report, and opens it automatically. |
+
+## Usage Example
+
+### Run tests and generate the report
+
+```
+npm run test:allure
+npm run allure:generate
+npm run allure:open
+```
+
+### Clean reports manually
+
+```
+npm run clean:reports
+```
+
+### Run the full cycle in one go
+
+```
+npm run allure:full
+```
+
+---
+
+## Output Paths
+
+Reports are generated in:
+
+```
+./allure-results/
+./allure-report/
+```
+
+## Benefits
+
+Allure provides detailed **step-by-step insights**, including:
+
+- Screenshots and traces
+- Execution history
+- Attachments and logs
+
+This makes it ideal for **local debugging** and **CI/CD pipeline integration**.
 
 ## Release Notes
 
