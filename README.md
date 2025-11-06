@@ -137,8 +137,10 @@ These extensions are required to allow VSCode to interact with the npm modules i
 
 ## Commands
 
-- `npx playwright test` - Runs Playwright’s test runner to execute your browser-based end-to-end
+- `npx cucumber-js` - Runs Cucumber's test runner to execute your browser-based end-to-end
   tests and report results.
+- `npx cucumber-js --tags "@tag"` - Only runs tests with the given tag. You can use multiple tags by using 'or' and 'add' to separate them. e.g. `npx cucumber-js --tags "@tag and @othertag"`
+  `npx cucumber-js --tags "not @tag"` - Only runs tests with the given tag.
 - `npm run lint` - Runs the linter (e.g., ESLint) to check your code for style issues and potential
   errors based on your linting rules.
 - `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted

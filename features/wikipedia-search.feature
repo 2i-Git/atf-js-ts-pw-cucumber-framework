@@ -1,3 +1,4 @@
+@wikisearch
 Feature: Wikipedia search
   Scenario Outline: Search article and check required words
     Given I am on the Wikipedia home page
