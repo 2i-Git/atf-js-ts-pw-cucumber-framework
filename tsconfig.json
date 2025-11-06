@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
-    "types": ["@playwright/test", "node"],
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
     "baseUrl": ".",
+    "types": ["node", "@playwright/test"],
     "paths": {
       "@components/*": ["components/*"],
       "@enums/*": ["enums/*"],
@@ -10,5 +16,6 @@
       "@models/*": ["models/*"],
       "@pages/*": ["pages/*"]
     }
-  }
+  },
+  "include": ["features/**/*.ts", "**/*.ts"]
 }
