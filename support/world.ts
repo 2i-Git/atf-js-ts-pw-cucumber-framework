@@ -24,6 +24,7 @@ export class CustomWorld extends World {
   }
 
   async cleanup() {
+    await this.page?.close();
     await this.context?.close();
     await this.browser?.close();
   }

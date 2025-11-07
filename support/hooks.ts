@@ -11,7 +11,4 @@ Before(async function (this: CustomWorld) {
 // close playwright context and broswer after each scenario
 After(async function (this: CustomWorld) {
   await this.cleanup();
-  if (this.page) await this.page.close();
-  if (this.context) await this.context.close();
-  if (this.browser) await this.browser.close();
 });
