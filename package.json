@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "format:write": "prettier . --write",
     "format:check": "prettier . --check",
-    "test": "cucumber-js --format progress, @cucumber/pretty-formatter",
+    "test": "cucumber-js --format progress",
     "test:allure": "cucumber-js ",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
