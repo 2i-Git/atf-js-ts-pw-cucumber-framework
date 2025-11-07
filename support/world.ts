@@ -19,7 +19,9 @@ export class CustomWorld extends World {
   // launches new playwright browser
   async init() {
     this.browser = await chromium.launch({ headless: true });
-    this.context = await this.browser.newContext();
+    this.context = await this.browser.newContext({
+      ignoreHTTPSErrors: true, // bypass cert verification
+    });
     this.page = await this.context.newPage();
   }
 

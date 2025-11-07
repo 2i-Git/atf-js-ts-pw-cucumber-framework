@@ -3,9 +3,6 @@ import { CustomWorld } from "../../support/world";
 import { GovUKSearchPage } from "../../pages/GovUKSearchPage";
 
 Given<CustomWorld>("the user is on the gov.uk homepage", async function () {
-  await this.init(); //create context
-  this.page = await this.context.newPage(); //create new page in the context
-
   this.govukPage = new GovUKSearchPage(this.page);
 
   await this.govukPage.goto();
