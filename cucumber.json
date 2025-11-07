@@ -2,7 +2,7 @@
   "default": {
     "require": ["features/**/*.ts", "support/**/*.ts"],
     "requireModule": ["ts-node/register"],
-    "format": ["progress", "json:reports/cucumber_report.json"],
+    "format": ["progress", "allure-cucumberjs/reporter"],
     "publishQuiet": true
   }
 }

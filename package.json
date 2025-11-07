@@ -6,7 +6,14 @@
   "scripts": {
     "lint": "eslint .",
     "format:write": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "test": "cucumber-js --format progress --exit",
+    "test:allure": "cucumber-js  allure-cucumberjs/reporter --exit",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "test:full": "cucumber-js && npm run allure:generate && npm run allure:open",
+    "test:report": "npm run test:generate && npm run allure:serve"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +24,8 @@
     "@playwright/test": "^1.56.1",
     "@types/cucumber": "^6.0.1",
     "@types/node": "^20.19.11",
+    "allure-commandline": "^2.34.1",
+    "allure-cucumberjs": "^3.4.2",
     "dotenv": "^16.6.1",
     "eslint": "^8.57.0",
     "globals": "^15.15.0",

@@ -14,7 +14,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 290366800
+              "duration": 230561600
             }
           },
           {
@@ -22,7 +22,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 215124299
+              "duration": 275157599
             }
           },
           {
@@ -35,7 +35,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 4296983500
+              "duration": 664551200
             }
           },
           {
@@ -48,7 +48,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 591499699
+              "duration": 126617099
             }
           },
           {
@@ -61,7 +61,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 89963399
+              "duration": 62103000
             }
           },
           {
@@ -69,7 +69,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 68512999
+              "duration": 89936199
             }
           },
           {
@@ -77,7 +77,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 952100
+              "duration": 2062600
             }
           }
         ],
@@ -109,7 +109,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 212453100
+              "duration": 320816299
             }
           },
           {
@@ -117,7 +117,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 191334199
+              "duration": 331257200
             }
           },
           {
@@ -130,7 +130,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 761575500
+              "duration": 734046500
             }
           },
           {
@@ -143,7 +143,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 159780699
+              "duration": 139921400
             }
           },
           {
@@ -156,7 +156,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 8790700
+              "duration": 21185100
             }
           },
           {
@@ -164,7 +164,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 88144200
+              "duration": 99679900
             }
           },
           {
@@ -172,7 +172,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 605700
+              "duration": 711900
             }
           }
         ],
@@ -200,7 +200,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 217961600
+              "duration": 403338500
             }
           },
           {
@@ -208,7 +208,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 201966099
+              "duration": 362961099
             }
           },
           {
@@ -221,7 +221,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 663402199
+              "duration": 784236400
             }
           },
           {
@@ -234,7 +234,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 631360699
+              "duration": 128813400
             }
           },
           {
@@ -247,7 +247,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 86598799
+              "duration": 93887299
             }
           },
           {
@@ -255,7 +255,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 78332699
+              "duration": 138779999
             }
           },
           {
@@ -263,7 +263,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 470999
+              "duration": 798399
             }
           }
         ],
@@ -295,5 +295,449 @@
       }
     ],
     "uri": "features\\govSearch.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "wikipedia-search;search-article-and-check-required-words",
+        "keyword": "Scenario Outline",
+        "line": 13,
+        "name": "Search article and check required words",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 404576100
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 412617900
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I am on the Wikipedia home page",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 603135100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "I search for \"Playwright (software)\"",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 723012000
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "Microsoft"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "testing"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "automation"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "the article should contain:",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 12058399
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 61641300
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 665300
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@wikisearch",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "wikipedia-search;search-article-and-check-required-words",
+        "keyword": "Scenario Outline",
+        "line": 14,
+        "name": "Search article and check required words",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 422093100
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 343387199
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I am on the Wikipedia home page",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 531069499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "I search for \"London\"",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 856176199
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "capital"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Thames"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "borough"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "the article should contain:",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 67419299
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 73860399
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 574800
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@wikisearch",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "wikipedia-search;search-article-and-check-required-words",
+        "keyword": "Scenario Outline",
+        "line": 15,
+        "name": "Search article and check required words",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 367473299
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 307405800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I am on the Wikipedia home page",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 454638399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "I search for \"Unit testing\"",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 575171900
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "code"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "assertion"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "framework"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "the article should contain:",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 9468699
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 66287799
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 740699
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@wikisearch",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "wikipedia-search;search-article-and-check-required-words",
+        "keyword": "Scenario Outline",
+        "line": 16,
+        "name": "Search article and check required words",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 250920500
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 301268799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I am on the Wikipedia home page",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 476976699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "I search for \"Automation testing\"",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 617953900
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "software"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "QA"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "manual"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "the article should contain:",
+            "match": {
+              "location": "features\\step_definitions\\wikipedia.steps.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8106599
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 58537400
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 543900
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@wikisearch",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "wikipedia-search",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Wikipedia search",
+    "tags": [
+      {
+        "name": "@wikisearch",
+        "line": 1
+      }
+    ],
+    "uri": "features\\wikipedia-search.feature"
   }
 ]
