@@ -26,6 +26,7 @@
     "@types/node": "^20.19.11",
     "allure-commandline": "^2.34.1",
     "allure-cucumberjs": "^3.4.2",
+    "allure-playwright": "^3.4.2",
     "dotenv": "^16.6.1",
     "eslint": "^8.57.0",
     "globals": "^15.15.0",
