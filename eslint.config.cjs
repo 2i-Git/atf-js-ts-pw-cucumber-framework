@@ -1,14 +1,16 @@
-// @ts-check
+const eslint = require("@eslint/js");
+const globals = require("globals");
+const tseslint = require("typescript-eslint");
 
-import eslint from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-
-export default tseslint.config(
+module.exports = tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
-    ignores: ["node_modules/", "playwright-report/", "test-results/"],
+    ignores: [
+      "node_modules/",
+      "playwright-report/",
+      "eslint.config.cjs", // ignore self
+    ],
   },
   {
     files: ["**/*.js"],
