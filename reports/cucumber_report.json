@@ -353,19 +353,13 @@
               {
                 "rows": [
                   {
-                    "cells": [
-                      "Microsoft"
-                    ]
+                    "cells": ["Microsoft"]
                   },
                   {
-                    "cells": [
-                      "testing"
-                    ]
+                    "cells": ["testing"]
                   },
                   {
-                    "cells": [
-                      "automation"
-                    ]
+                    "cells": ["automation"]
                   }
                 ]
               }
@@ -460,19 +454,13 @@
               {
                 "rows": [
                   {
-                    "cells": [
-                      "capital"
-                    ]
+                    "cells": ["capital"]
                   },
                   {
-                    "cells": [
-                      "Thames"
-                    ]
+                    "cells": ["Thames"]
                   },
                   {
-                    "cells": [
-                      "borough"
-                    ]
+                    "cells": ["borough"]
                   }
                 ]
               }
@@ -567,19 +555,13 @@
               {
                 "rows": [
                   {
-                    "cells": [
-                      "code"
-                    ]
+                    "cells": ["code"]
                   },
                   {
-                    "cells": [
-                      "assertion"
-                    ]
+                    "cells": ["assertion"]
                   },
                   {
-                    "cells": [
-                      "framework"
-                    ]
+                    "cells": ["framework"]
                   }
                 ]
               }
@@ -674,19 +656,13 @@
               {
                 "rows": [
                   {
-                    "cells": [
-                      "software"
-                    ]
+                    "cells": ["software"]
                   },
                   {
-                    "cells": [
-                      "QA"
-                    ]
+                    "cells": ["QA"]
                   },
                   {
-                    "cells": [
-                      "manual"
-                    ]
+                    "cells": ["manual"]
                   }
                 ]
               }
