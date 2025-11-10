@@ -165,13 +165,14 @@ These extensions are required to allow VSCode to interact with the npm modules i
 - `npm run test:allure` - Run tests with Allure reporting enabled.
 - `npx cucumber-js` - Run Cucumber directly using the default profile. (Only useful if you need to
   bypass npm scripts or debug the test runner.)
+- `npm run allure` - Generate and open Allure files after using tag filtering.
+
 
 ### Tag Filtering Commands
 
-- `npx cucumber-js --tags "@smoke"` - Only runs scenarios with the `@smoke` tag
-- `npx cucumber-js --tags "not @wip"` - Runs all scenarios except those tagged with `@wip`
-- `npx cucumber-js --tags "@ui and @regression"` - Runs scenarios with both tags
-- `npm run allure` - Generate and open Allure files after using tag filtering.
+- `npm run test:allure -- --tags="@visa"` - Only runs scenarios with the `@smoke` tag
+- `npm run test:allure -- --tags="not @visa"` - Runs all scenarios except those tagged with `@wip`
+- `npm run test:allure -- --tags="@regression and @smoke"` - Runs scenarios with both tags
 
 Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually afterward.
 
@@ -454,11 +455,6 @@ Add these scripts to your `package.json`:
 
 - `test` - Runs Cucumber tests with progress output
 - `test:allure` - Runs tests and generates Allure-compatible results
-- `test:full` - Complete workflow: run tests → generate report → open in browser
-- `test:report` - Run tests and serve report immediately
-
-> **Note:** The `--exit` flag ensures Cucumber terminates cleanly even if async handles remain open,
-> which is important for CI/CD pipelines.
 
 ### Running BDD Tests
 
@@ -633,19 +629,10 @@ java -version
 | `npm run lint`                | Runs ESLint across the project to detect code-quality or style issues.                                |
 | `npm run format:write`        | Formats all code files automatically using Prettier.                                                  |
 | `npm run format:check`        | Checks whether files follow Prettier formatting without modifying them.                               |
-| `npm test`                    | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
+| `npm run test`                    | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
 | `npm run test:allure`         | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
 | `npm run allure:generate`     | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
-| `npm run allure:open`         | Opens the generated Allure report in your default browser (requires Java installed locally).          |
-| `npm run allure:serve`        | Serves the Allure results on a temporary local web server (useful for quick previews).                |
-| `npm run test:full`           | Performs the full workflow: runs tests, generates the Allure HTML report, and opens it automatically. |
-| `npm run test:report`         | Runs tests with Allure and immediately serves the results via the local Allure web server.            |
-| `npm run test:govsearch`      | Runs only scenarios tagged `@govsearch`, then generates an Allure report.                             |
-| `npm run test:smoke`          | Runs only smoke-tagged scenarios (`@smoke`), then builds a report.                                    |
-| `npm run test:visa`           | Executes `@visa` scenarios and generates the report.                                                  |
-| `npm run test:wikisearch`     | Executes `@wikisearch` scenarios and generates the report.                                            |
-| `npm run test:govsearch:open` | Same as above, but also opens the generated HTML report (requires Java).                              |
-| `npm run clean:reports`       | Deletes previous Allure result and report folders before a new run.                                   |
+| `npm run allure:open`         | Opens the generated Allure report in your default browser (requires Java installed locally).          |                                |
 
 ## Usage Example
 
