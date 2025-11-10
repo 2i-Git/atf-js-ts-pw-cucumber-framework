@@ -82,7 +82,7 @@ If you don't see version numbers or get an error,
 3. Add all [VS Code Extensions](#VSCode-Extensions)
 4. Run `npm install`
 5. Run `npx playwright install`
-6. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
+6. Finally, we can now run `npm run test` to start testing, this should pass and prove that
    everything is setup correctly
 
 ### npm modules
@@ -101,7 +101,7 @@ Typescript-ESLint currently requires specific npm package versions:
 
 #### Cucumber BDD Dependencies
 
-If you plan to use Cucumber for BDD testing, also install:
+To use Cucumber for BDD testing, also install:
 
 ```bash
 npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
@@ -159,26 +159,24 @@ These extensions are required to allow VSCode to interact with the npm modules i
 
 ## Commands
 
-### Playwright Commands
+### Test Commands
 
-- `npx playwright test` - Runs Playwright's test runner to execute your browser-based end-to-end
-  tests and report results.
-- `npx playwright test --headed` - Runs tests in headed mode (browser visible)
-- `npx playwright test --project=chromium` - Runs tests on specific browser
+- `npm run test` - Run tests normally (console output only).
+- `npm run test:allure` - Run tests with Allure reporting enabled.
+- `npx cucumber-js` - Run Cucumber directly using the default profile. (Only useful if you need to
+  bypass npm scripts or debug the test runner.)
 
-### Cucumber Commands
+### Tag Filtering Commands
 
-- `npx cucumber-js` - Runs Cucumber's test runner to execute your BDD feature files
 - `npx cucumber-js --tags "@smoke"` - Only runs scenarios with the `@smoke` tag
 - `npx cucumber-js --tags "not @wip"` - Runs all scenarios except those tagged with `@wip`
 - `npx cucumber-js --tags "@ui and @regression"` - Runs scenarios with both tags
-- `npm run test` - Runs Cucumber tests using the configured npm script
-- `npm run test:allure` - Runs Cucumber tests with Allure reporting enabled
+- `npm run allure` - Generate and open Allure files after using tag filtering.
+
+Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually afterward.
 
 ### Linting and Formatting Commands
 
-- `npm run lint` - Runs the linter (e.g., ESLint) to check your code for style issues and potential
-  errors based on your linting rules.
 - `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
   correctly without modifying them. Fails if formatting issues are found.
 - `npm run format:write` - Runs Prettier in write mode to automatically format your files in place
