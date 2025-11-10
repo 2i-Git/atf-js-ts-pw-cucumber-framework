@@ -82,7 +82,7 @@ If you don't see version numbers or get an error,
 3. Add all [VS Code Extensions](#VSCode-Extensions)
 4. Run `npm install`
 5. Run `npx playwright install`
-6. Finally, we can now run `npx playwright test` to start testing, this should pass and prove that
+6. Finally, we can now run `npm run test` to start testing, this should pass and prove that
    everything is setup correctly
 
 ### npm modules
@@ -101,7 +101,7 @@ Typescript-ESLint currently requires specific npm package versions:
 
 #### Cucumber BDD Dependencies
 
-If you plan to use Cucumber for BDD testing, also install:
+To use Cucumber for BDD testing, also install:
 
 ```bash
 npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
@@ -159,26 +159,25 @@ These extensions are required to allow VSCode to interact with the npm modules i
 
 ## Commands
 
-### Playwright Commands
+### Test Commands
 
-- `npx playwright test` - Runs Playwright's test runner to execute your browser-based end-to-end
-  tests and report results.
-- `npx playwright test --headed` - Runs tests in headed mode (browser visible)
-- `npx playwright test --project=chromium` - Runs tests on specific browser
+- `npm run test` - Run tests normally (console output only).
+- `npm run test:allure` - Run tests with Allure reporting enabled.
+- `npx cucumber-js` - Run Cucumber directly using the default profile. (Only useful if you need to
+  bypass npm scripts or debug the test runner.)
+- `npm run allure` - Generate and open Allure files after using tag filtering.
 
-### Cucumber Commands
+### Tag Filtering Commands
 
-- `npx cucumber-js` - Runs Cucumber's test runner to execute your BDD feature files
-- `npx cucumber-js --tags "@smoke"` - Only runs scenarios with the `@smoke` tag
-- `npx cucumber-js --tags "not @wip"` - Runs all scenarios except those tagged with `@wip`
-- `npx cucumber-js --tags "@ui and @regression"` - Runs scenarios with both tags
-- `npm run test` - Runs Cucumber tests using the configured npm script
-- `npm run test:allure` - Runs Cucumber tests with Allure reporting enabled
+- `npm run test:allure -- --tags="@visa"` - Only runs scenarios with the `@smoke` tag
+- `npm run test:allure -- --tags="not @visa"` - Runs all scenarios except those tagged with `@wip`
+- `npm run test:allure -- --tags="@regression and @smoke"` - Runs scenarios with both tags
+
+Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually
+afterward.
 
 ### Linting and Formatting Commands
 
-- `npm run lint` - Runs the linter (e.g., ESLint) to check your code for style issues and potential
-  errors based on your linting rules.
 - `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
   correctly without modifying them. Fails if formatting issues are found.
 - `npm run format:write` - Runs Prettier in write mode to automatically format your files in place
@@ -456,11 +455,6 @@ Add these scripts to your `package.json`:
 
 - `test` - Runs Cucumber tests with progress output
 - `test:allure` - Runs tests and generates Allure-compatible results
-- `test:full` - Complete workflow: run tests → generate report → open in browser
-- `test:report` - Run tests and serve report immediately
-
-> **Note:** The `--exit` flag ensures Cucumber terminates cleanly even if async handles remain open,
-> which is important for CI/CD pipelines.
 
 ### Running BDD Tests
 
@@ -628,26 +622,17 @@ java -version
 
 ## Available Scripts
 
-| Command                       | Description                                                                                           |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Command                       | Description                                                                                           |
-| -------------------------     | ----------------------------------------------------------------------------------------------------- |
-| `npm run lint`                | Runs ESLint across the project to detect code-quality or style issues.                                |
-| `npm run format:write`        | Formats all code files automatically using Prettier.                                                  |
-| `npm run format:check`        | Checks whether files follow Prettier formatting without modifying them.                               |
-| `npm test`                    | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
-| `npm run test:allure`         | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
-| `npm run allure:generate`     | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
-| `npm run allure:open`         | Opens the generated Allure report in your default browser (requires Java installed locally).          |
-| `npm run allure:serve`        | Serves the Allure results on a temporary local web server (useful for quick previews).                |
-| `npm run test:full`           | Performs the full workflow: runs tests, generates the Allure HTML report, and opens it automatically. |
-| `npm run test:report`         | Runs tests with Allure and immediately serves the results via the local Allure web server.            |
-| `npm run test:govsearch`      | Runs only scenarios tagged `@govsearch`, then generates an Allure report.                             |
-| `npm run test:smoke`          | Runs only smoke-tagged scenarios (`@smoke`), then builds a report.                                    |
-| `npm run test:visa`           | Executes `@visa` scenarios and generates the report.                                                  |
-| `npm run test:wikisearch`     | Executes `@wikisearch` scenarios and generates the report.                                            |
-| `npm run test:govsearch:open` | Same as above, but also opens the generated HTML report (requires Java).                              |
-| `npm run clean:reports`       | Deletes previous Allure result and report folders before a new run.                                   |
+| Command                   | Description                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- | --- |
+| Command                   | Description                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `npm run lint`            | Runs ESLint across the project to detect code-quality or style issues.                                |
+| `npm run format:write`    | Formats all code files automatically using Prettier.                                                  |
+| `npm run format:check`    | Checks whether files follow Prettier formatting without modifying them.                               |
+| `npm run test`            | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
+| `npm run test:allure`     | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
+| `npm run allure:generate` | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
+| `npm run allure:open`     | Opens the generated Allure report in your default browser (requires Java installed locally).          |     |
 
 ## Usage Example
 
