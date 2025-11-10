@@ -25,13 +25,20 @@ maintained by 2i Testing.
       - [Documentation](#documentation-1)
       - [`baseUrl`](#baseurl)
       - [`paths` (Path Alias)](#paths-path-alias)
+    - [`cucumber.js`](#cucumberjs)
   - [Folder Structure](#folder-structure)
     - [`components`](#components)
     - [`enums`](#enums)
+    - [`features`](#features)
     - [`fixtures`](#fixtures)
     - [`helpers`](#helpers)
     - [`models`](#models)
     - [`pages`](#pages)
+    - [`support`](#support)
+  - [Cucumber (BDD) Integration](#cucumber-bdd-integration)
+    - [Installation](#cucumber-installation)
+    - [Running BDD Tests](#running-bdd-tests)
+    - [Allure Reporting for Cucumber](#allure-reporting-for-cucumber)
   - [Style Guide](#style-guide)
     - [Identifiers](#identifiers)
     - [Filenames](#filenames)
@@ -39,11 +46,13 @@ maintained by 2i Testing.
       - [Write Simple Code](#write-simple-code)
       - [Guard Clauses](#guard-clauses)
   - [Code Snippets](#code-snippets)
-  - [Release Notes](#release-notes)
   - [Allure Report](#allure-reporting)
+  - [Release Notes](#release-notes)
+    - [Docker Support](#docker-support)
     - [Version 0.1](#version-01)
     - [Version 0.2](#version-02)
     - [Version 0.3](#version-03)
+    - [Version 0.4](#version-04)
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
@@ -63,7 +72,7 @@ node -v
 npm -v
 ```
 
-If you don’t see version numbers or get an error,
+If you don't see version numbers or get an error,
 [download and install Node.js](https://nodejs.org/).
 
 ### Using GitHub
@@ -90,6 +99,14 @@ Typescript-ESLint currently requires specific npm package versions:
 - @eslint/js - 8.57.0
 - typescript - 5.4.5
 
+#### Cucumber BDD Dependencies
+
+If you plan to use Cucumber for BDD testing, also install:
+
+```bash
+npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
+```
+
 ### Files
 
 Download the following files and **_merge_** them into the project.
@@ -98,6 +115,7 @@ Download the following files and **_merge_** them into the project.
 - [`.prettier.config.js`](#prettierconfig)
 - [`playwright.config.js`](#playwrightconfig)
 - [`tsconfig.json`](#tsconfig)
+- [`cucumber.js`](#cucumberjs) (if using Cucumber BDD)
 
 Inside the package.json file add:
 
@@ -125,6 +143,9 @@ These extensions are required to allow VSCode to interact with the npm modules i
   - To initiate formatting you can use `shift` + `alt` + `F`.
   - Alternatively search for `editor.formatOnSave` inside the Settings UI and check the box and it
     will then format the file whenever you press Save or `ctrl` + `S`
+- [Cucumber (Gherkin) Full Support](https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete)
+  (Optional - for BDD)
+  - Provides syntax highlighting and autocomplete for `.feature` files
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
@@ -134,11 +155,28 @@ These extensions are required to allow VSCode to interact with the npm modules i
 - [`.prettier.config.js`](#prettierconfig) - Prettier config
 - [`playwright.config.js`](#playwrightconfig) - Playwright config
 - [`tsconfig.json`](#tsconfig) - Typescript config
+- [`cucumber.js`](#cucumberjs) - Cucumber config (for BDD testing)
 
 ## Commands
 
-- `npx playwright test` - Runs Playwright’s test runner to execute your browser-based end-to-end
+### Playwright Commands
+
+- `npx playwright test` - Runs Playwright's test runner to execute your browser-based end-to-end
   tests and report results.
+- `npx playwright test --headed` - Runs tests in headed mode (browser visible)
+- `npx playwright test --project=chromium` - Runs tests on specific browser
+
+### Cucumber Commands
+
+- `npx cucumber-js` - Runs Cucumber's test runner to execute your BDD feature files
+- `npx cucumber-js --tags "@smoke"` - Only runs scenarios with the `@smoke` tag
+- `npx cucumber-js --tags "not @wip"` - Runs all scenarios except those tagged with `@wip`
+- `npx cucumber-js --tags "@ui and @regression"` - Runs scenarios with both tags
+- `npm run test` - Runs Cucumber tests using the configured npm script
+- `npm run test:allure` - Runs Cucumber tests with Allure reporting enabled
+
+### Linting and Formatting Commands
+
 - `npm run lint` - Runs the linter (e.g., ESLint) to check your code for style issues and potential
   errors based on your linting rules.
 - `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
@@ -204,6 +242,55 @@ you can write
 import Homepage from "@pages/Homepage";
 ```
 
+**Important for Cucumber:** Ensure `features/**/*.ts` is included in the `include` array so
+TypeScript recognizes your step definitions:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@enums/*": ["enums/*"],
+      "@fixtures/*": ["fixtures/*"],
+      "@helpers/*": ["helpers/*"],
+      "@models/*": ["models/*"],
+      "@pages/*": ["pages/*"]
+    }
+  },
+  "include": ["features/**/*.ts", "**/*.ts"]
+}
+```
+
+---
+
+### `cucumber.js`
+
+Configuration file for Cucumber BDD testing. This file tells Cucumber where to find step
+definitions, how to run TypeScript files, and which reporters to use.
+
+**Example configuration:**
+
+```json
+{
+  "default": {
+    "require": ["features/**/*.ts", "support/**/*.ts"],
+    "requireModule": ["ts-node/register", "tsconfig-paths/register"],
+    "format": ["progress", "allure-cucumberjs/reporter"],
+    "publishQuiet": true
+  }
+}
+```
+
+**Key settings:**
+
+- `require` - Points to step definitions and support code locations
+- `requireModule` - Enables TypeScript execution and path alias support
+- `format` - Configures console output and Allure report generation
+- `publishQuiet` - Suppresses Cucumber's cloud sharing prompt
+
+#### [Documentation](https://github.com/cucumber/cucumber-js/blob/main/docs/configuration.md)
+
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
 ## Folder Structure
@@ -220,6 +307,40 @@ By default, this folder contains a `BaseComponent` POM.
 ### `enums`
 
 **Somewhere to store Enumerated objects (enums)**
+
+### `features`
+
+**Somewhere to store Cucumber feature files and step definitions (for BDD testing)**
+
+This folder contains:
+
+- **`.feature` files** - Gherkin scenarios written in plain English that describe test cases
+- **`step_definitions/` or `steps/`** - TypeScript files that implement the steps from feature files
+
+**Example feature file** (`features/search/search.feature`):
+
+```gherkin
+Feature: Search on GOV.UK
+
+  @smoke
+  Scenario: Search for a service
+    Given I open the GOV.UK homepage
+    When I search for "passport"
+    Then I should see results containing "passport"
+```
+
+**Example step definition** (`features/step_definitions/search.steps.ts`):
+
+```typescript
+import { Given, When, Then } from "@cucumber/cucumber";
+import { GovUKSearchPage } from "@pages/GovUKSearchPage";
+
+Given("I open the GOV.UK homepage", async function () {
+  const page = this.page; // from support/world.ts
+  const govPage = new GovUKSearchPage(page);
+  await govPage.goto();
+});
+```
 
 ### `fixtures`
 
@@ -252,6 +373,156 @@ import { test, expect } from "@fixtures/combined";
 **Somewhere to store Page Object Models (POMs)**
 
 By default, this folder contains a `BasePage` POM.
+
+### `support`
+
+**Somewhere to store Cucumber support files (for BDD testing)**
+
+This folder contains:
+
+- **`world.ts`** - Custom Cucumber World where Playwright browser, context, and page are attached so
+  each scenario has its own isolated browser setup
+- **`hooks.ts`** - Before and After hooks for setup/teardown, screenshot capture on failure, and
+  Allure attachment
+
+**Example hooks file:**
+
+```typescript
+import fs from "fs";
+import path from "path";
+import { After, Before } from "@cucumber/cucumber";
+import { chromium } from "@playwright/test";
+
+Before(async function () {
+  this.browser = await chromium.launch();
+  this.context = await this.browser.newContext();
+  this.page = await this.context.newPage();
+});
+
+After(async function (scenario) {
+  if (scenario.result?.status === "FAILED" && this.page) {
+    const screenshot = await this.page.screenshot();
+    const dir = "./allure-results";
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const fileName = `screenshot-${Date.now()}.png`;
+    fs.writeFileSync(path.join(dir, fileName), screenshot);
+    await this.attach(screenshot, "image/png");
+  }
+  if (this.context) await this.context.close();
+  if (this.browser) await this.browser.close();
+});
+```
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## Cucumber (BDD) Integration
+
+This framework supports running end-to-end tests using Cucumber (Gherkin) on top of Playwright and
+TypeScript. This allows delivery teams to write business-readable scenarios (`.feature` files) while
+using the same Page Objects, helpers, and TypeScript configuration as the rest of the project.
+
+### Cucumber Installation
+
+Install the required Cucumber dependencies:
+
+```bash
+npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
+```
+
+**What each package does:**
+
+- `@cucumber/cucumber` - The Cucumber test runner
+- `ts-node` - Allows Cucumber to run `.ts` step files directly without compilation
+- `tsconfig-paths` - Makes Cucumber respect path aliases from `tsconfig.json` (e.g., `@pages/*`,
+  `@helpers/*`)
+- `allure-cucumberjs` - Cucumber formatter for Allure report generation
+
+### NPM Scripts for Cucumber
+
+Add these scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test": "cucumber-js --format progress --exit",
+    "test:allure": "cucumber-js --format progress --format allure-cucumberjs/reporter --exit",
+    "test:full": "npm run test:allure && npm run allure:generate && npm run allure:open",
+    "test:report": "npm run test:allure && npm run allure:serve"
+  }
+}
+```
+
+**Script descriptions:**
+
+- `test` - Runs Cucumber tests with progress output
+- `test:allure` - Runs tests and generates Allure-compatible results
+- `test:full` - Complete workflow: run tests → generate report → open in browser
+- `test:report` - Run tests and serve report immediately
+
+> **Note:** The `--exit` flag ensures Cucumber terminates cleanly even if async handles remain open,
+> which is important for CI/CD pipelines.
+
+### Running BDD Tests
+
+**Run all feature files:**
+
+```bash
+npx cucumber-js
+```
+
+or
+
+```bash
+npm run test
+```
+
+**Run tests with specific tags:**
+
+```bash
+npx cucumber-js --tags "@smoke"
+npx cucumber-js --tags "not @wip"
+npx cucumber-js --tags "@ui and @regression"
+```
+
+> **Important:** Tag filtering happens at the Cucumber level, not Playwright level. Keep tag names
+> consistent across feature files.
+
+### Allure Reporting for Cucumber
+
+Cucumber integrates with Allure differently than Playwright's native `allure-playwright`.
+
+**Generate Allure results:**
+
+```bash
+npm run test:allure
+```
+
+This creates `./allure-results/` containing test data.
+
+**Generate HTML report:**
+
+```bash
+npm run allure:generate
+```
+
+This creates `./allure-report/` with the HTML report.
+
+**Open the report:**
+
+```bash
+npm run allure:open
+```
+
+**Troubleshooting empty reports:**
+
+- Verify the formatter is `allure-cucumberjs/reporter` in `cucumber.js`
+- Ensure at least one scenario ran successfully
+- Check that `allure-results/` is not blocked by OneDrive or corporate sync software
+
+> **⚠️ Windows Warning:** On Windows setups with OneDrive-synchronized folders, Allure may fail to
+> write or open reports. Generate reports to a local, non-synchronized path or run from a CI agent.
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
 ## Style Guide
 
@@ -341,31 +612,48 @@ and failure details.
 
 Before running the commands below, ensure the required dependencies are installed:
 
+```bash
 npm install -D allure-playwright allure-commandline rimraf
+```
 
-- **allure-playwright** – integrates Allure with Playwright’s test runner.
+- **allure-playwright** – integrates Allure with Playwright's test runner.
 - **allure-commandline** – provides the CLI for generating and opening Allure reports.
 - **rimraf** – safely removes folders (used for cleaning old results across all platforms).
 
-> **Note:** Allure requires **Java** to generate reports. Verify it’s installed by running:
+> **Note:** Allure requires **Java** to generate reports. Verify it's installed by running:
 
-> java -version
+```bash
+java -version
+```
 
 ## Available Scripts
 
-| Command                   | Description                                                                                              |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `npm run test:allure`     | Cleans any previous results and runs all Playwright tests using the Allure reporter.                     |
-| `npm run allure:generate` | Generates a new Allure HTML report from the latest test results.                                         |
-| `npm run allure:open`     | Opens the generated Allure report in your default browser.                                               |
-| `npm run clean:reports`   | Removes all previous `allure-results` and `allure-report` folders.                                       |
-| `npm run allure:full`     | Performs a full cycle: cleans old results, runs tests, generates the report, and opens it automatically. |
+| Command                       | Description                                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Command                       | Description                                                                                           |
+| -------------------------     | ----------------------------------------------------------------------------------------------------- |
+| `npm run lint`                | Runs ESLint across the project to detect code-quality or style issues.                                |
+| `npm run format:write`        | Formats all code files automatically using Prettier.                                                  |
+| `npm run format:check`        | Checks whether files follow Prettier formatting without modifying them.                               |
+| `npm test`                    | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
+| `npm run test:allure`         | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
+| `npm run allure:generate`     | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
+| `npm run allure:open`         | Opens the generated Allure report in your default browser (requires Java installed locally).          |
+| `npm run allure:serve`        | Serves the Allure results on a temporary local web server (useful for quick previews).                |
+| `npm run test:full`           | Performs the full workflow: runs tests, generates the Allure HTML report, and opens it automatically. |
+| `npm run test:report`         | Runs tests with Allure and immediately serves the results via the local Allure web server.            |
+| `npm run test:govsearch`      | Runs only scenarios tagged `@govsearch`, then generates an Allure report.                             |
+| `npm run test:smoke`          | Runs only smoke-tagged scenarios (`@smoke`), then builds a report.                                    |
+| `npm run test:visa`           | Executes `@visa` scenarios and generates the report.                                                  |
+| `npm run test:wikisearch`     | Executes `@wikisearch` scenarios and generates the report.                                            |
+| `npm run test:govsearch:open` | Same as above, but also opens the generated HTML report (requires Java).                              |
+| `npm run clean:reports`       | Deletes previous Allure result and report folders before a new run.                                   |
 
 ## Usage Example
 
 ### Run tests and generate the report
 
-```
+```bash
 npm run test:allure
 npm run allure:generate
 npm run allure:open
@@ -373,14 +661,14 @@ npm run allure:open
 
 ### Clean reports manually
 
-```
+```bash
 npm run clean:reports
 ```
 
 ### Run the full cycle in one go
 
-```
-npm run allure:full
+```bash
+npm run test:full
 ```
 
 ---
@@ -403,6 +691,187 @@ Allure provides detailed **step-by-step insights**, including:
 - Attachments and logs
 
 This makes it ideal for **local debugging** and **CI/CD pipeline integration**.
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+## Docker Support
+
+### Overview
+
+This project includes Docker support for running Playwright tests in a containerized environment.
+This is especially useful for:
+
+- **CI/CD pipelines** - Consistent test execution across different environments
+- **Team collaboration** - Everyone runs tests in the same environment regardless of their local
+  setup
+- **Avoiding dependency issues** - All required dependencies (browsers, Java for Allure, Node.js)
+  are pre-configured
+- **Isolated testing** - Tests run in a clean, isolated environment every time
+
+### Dockerfile Explained
+
+The project's `Dockerfile` is built with several key components:
+
+#### Base Image
+
+```dockerfile
+FROM mcr.microsoft.com/playwright:v1.48.0-jammy
+```
+
+Uses the official Playwright Docker image based on Ubuntu Jammy (22.04). This image comes
+pre-installed with:
+
+- All Playwright browser binaries (Chromium, Firefox, WebKit)
+- Required system dependencies for running browsers
+- Node.js runtime
+
+#### Java Installation for Allure
+
+```dockerfile
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jre-headless && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+Installs OpenJDK 17 (Java Runtime Environment) which is required to generate Allure reports. The
+`headless` version is used since we don't need a GUI. The cleanup command removes package lists to
+reduce image size.
+
+#### Working Directory
+
+```dockerfile
+WORKDIR /app
+```
+
+Sets `/app` as the working directory inside the container where all project files will be copied.
+
+#### Dependency Installation
+
+```dockerfile
+COPY package*.json ./
+RUN npm ci
+```
+
+Copies only the package files first (for better Docker layer caching), then runs `npm ci` to install
+dependencies. Using `npm ci` instead of `npm install` ensures:
+
+- Faster, more reliable installations
+- Exact versions from `package-lock.json` are used
+- Clean installs every time
+
+#### Project Files
+
+```dockerfile
+COPY . .
+```
+
+Copies all project files into the container. Files listed in `.dockerignore` are excluded (like
+`node_modules`, `reports`, etc.).
+
+#### Reports Directory
+
+```dockerfile
+RUN mkdir -p reports/allure-results
+```
+
+Creates the reports directory structure to ensure Allure has a place to write results.
+
+#### Default Command
+
+```dockerfile
+CMD ["npm", "run", "test:full"]
+```
+
+Sets the default command to run when the container starts. This executes the full test suite with
+Allure reporting.
+
+### Building the Docker Image
+
+Build the Docker image using:
+
+```bash
+docker build -t playwright-tests .
+```
+
+**Options:**
+
+- `-t playwright-tests` - Tags the image with a name for easy reference
+- `.` - Uses the current directory as the build context
+
+**Build time:** First build may take several minutes as it downloads the base image and installs
+dependencies.
+
+### Running Tests in Docker
+
+#### Run the default test suite:
+
+```bash
+docker run --rm playwright-tests
+```
+
+#### Run with custom commands:
+
+```bash
+# Run only smoke tests
+docker run --rm playwright-tests npm run test:smoke
+
+# Run with specific Cucumber tags
+docker run --rm playwright-tests npx cucumber-js --tags "@govsearch"
+
+# Run Playwright tests in headed mode (requires X11 forwarding)
+docker run --rm playwright-tests npx playwright test --headed
+```
+
+#### Extract reports from the container:
+
+```bash
+# Run tests and copy reports to your local machine
+docker run --name test-run playwright-tests
+docker cp test-run:/app/allure-report ./allure-report
+docker rm test-run
+```
+
+#### Run with volume mounting (for live development):
+
+```bash
+docker run --rm \
+  -v $(pwd):/app \
+  -v /app/node_modules \
+  playwright-tests \
+  npm run test:allure
+```
+
+This mounts your local code into the container while preserving the container's `node_modules`.
+
+#### Interactive mode (for debugging):
+
+```bash
+docker run --rm -it playwright-tests /bin/bash
+```
+
+Once inside, you can run any npm commands manually.
+
+### Docker Best Practices
+
+#### Using .dockerignore
+
+The `.dockerignore` file prevents unnecessary files from being copied into the Docker image:
+
+```
+node_modules
+npm-debug.log
+reports
+allure-results
+allure-report
+.git
+.DS_Store
+```
+
+This reduces build time and image size by excluding:
+
+- Development dependencies already installed via `npm ci`
+- Previous test reports
+- Version control files
+- OS-specific files
 
 ## Release Notes
 
@@ -427,7 +896,7 @@ This makes it ideal for **local debugging** and **CI/CD pipeline integration**.
   - Removed Barrelling advice to make tests run quicker
     [More Info](https://dev.to/tassiofront/barrel-files-and-why-you-should-stop-using-them-now-bc4)
 
-  ### Version 0.4
+### Version 0.4
 
 - ATF Work started
   - Rebranded repository.
@@ -438,3 +907,17 @@ This makes it ideal for **local debugging** and **CI/CD pipeline integration**.
   - Updated Node 20.12 > 20.19
   - Updated dotENV 16.4 > 16.6
   - Updated Globals 15.1 > 15.15
+
+### Version 0.5
+
+- Added Cucumber (BDD) Integration
+  - Added `@cucumber/cucumber`, `ts-node`, `tsconfig-paths`, and `allure-cucumberjs` dependencies
+  - Added `cucumber.js` configuration file
+  - Added `features/` folder structure for feature files and step definitions
+  - Added `support/` folder for Cucumber World and hooks
+  - Updated `tsconfig.json` to include `features/**/*.ts`
+  - Added Cucumber-specific npm scripts
+  - Integrated Allure reporting for Cucumber runs
+  - Updated README with comprehensive Cucumber documentation
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
