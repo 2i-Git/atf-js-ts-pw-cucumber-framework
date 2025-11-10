@@ -167,14 +167,14 @@ These extensions are required to allow VSCode to interact with the npm modules i
   bypass npm scripts or debug the test runner.)
 - `npm run allure` - Generate and open Allure files after using tag filtering.
 
-
 ### Tag Filtering Commands
 
 - `npm run test:allure -- --tags="@visa"` - Only runs scenarios with the `@smoke` tag
 - `npm run test:allure -- --tags="not @visa"` - Runs all scenarios except those tagged with `@wip`
 - `npm run test:allure -- --tags="@regression and @smoke"` - Runs scenarios with both tags
 
-Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually afterward.
+Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually
+afterward.
 
 ### Linting and Formatting Commands
 
@@ -622,17 +622,17 @@ java -version
 
 ## Available Scripts
 
-| Command                       | Description                                                                                           |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Command                       | Description                                                                                           |
-| -------------------------     | ----------------------------------------------------------------------------------------------------- |
-| `npm run lint`                | Runs ESLint across the project to detect code-quality or style issues.                                |
-| `npm run format:write`        | Formats all code files automatically using Prettier.                                                  |
-| `npm run format:check`        | Checks whether files follow Prettier formatting without modifying them.                               |
-| `npm run test`                    | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
-| `npm run test:allure`         | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
-| `npm run allure:generate`     | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
-| `npm run allure:open`         | Opens the generated Allure report in your default browser (requires Java installed locally).          |                                |
+| Command                   | Description                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- | --- |
+| Command                   | Description                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `npm run lint`            | Runs ESLint across the project to detect code-quality or style issues.                                |
+| `npm run format:write`    | Formats all code files automatically using Prettier.                                                  |
+| `npm run format:check`    | Checks whether files follow Prettier formatting without modifying them.                               |
+| `npm run test`            | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
+| `npm run test:allure`     | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
+| `npm run allure:generate` | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
+| `npm run allure:open`     | Opens the generated Allure report in your default browser (requires Java installed locally).          |     |
 
 ## Usage Example
 
