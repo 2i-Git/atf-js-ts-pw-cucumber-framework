@@ -29,4 +29,3 @@ Then("I should get a list of countries", function () {
 
   expect(count).toBeGreaterThan(0);
 });
-
