@@ -1,12 +1,12 @@
 {
   "default": {
-    "require": ["features/**/*.ts", "support/**/*.ts"],
+    "require": ["features/**/*.ts", "step_definitions/**/*.ts", "support/**/*.ts"],
     "requireModule": ["ts-node/register"],
     "format": ["progress"],
     "publishQuiet": true
   },
   "allure": {
-    "require": ["features/**/*.ts", "support/**/*.ts"],
+    "require": ["features/**/*.ts", "step_definitions/**/*.ts", "support/**/*.ts"],
     "requireModule": ["ts-node/register"],
     "format": ["allure-cucumberjs/reporter"],
     "publishQuiet": true
