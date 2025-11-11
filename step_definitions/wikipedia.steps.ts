@@ -1,6 +1,6 @@
 import { Given, When, Then, DataTable } from "@cucumber/cucumber";
-import { WikipediaPage } from "../../pages/wikipedia.page";
-import { CustomWorld } from "../../support/world";
+import { WikipediaPage } from "../pages/wikipedia.page";
+import { CustomWorld } from "../support/world";
 
 Given("I am on the Wikipedia home page", async function (this: CustomWorld) {
   const wiki = new WikipediaPage(this.page);
