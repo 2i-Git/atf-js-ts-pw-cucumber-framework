@@ -1,31 +1,16 @@
 import { When, Then } from "@cucumber/cucumber";
-import { request, APIResponse } from "playwright";
 import { expect } from "@playwright/test";
+import { CountriesAPI } from "../api/countriesAPI";
 
-interface Country {
-  name: {
-    common: string;
-    official: string;
-  };
-  region: string;
-  [key: string]: unknown;
-}
-
-let response: APIResponse;
-let countryList: Country[];
+let countryList: string[];
 
 When("I fetch the region {string}", async function (region: string) {
-  const apiContext = await request.newContext();
-
-  response = await apiContext.get(`https://restcountries.com/v3.1/region/${region}`);
-
-  const json = (await response.json()) as Country[]; // casting safely
-  countryList = json;
+  const api = new CountriesAPI();
+  countryList = await api.getCountriesByRegion(region);
 });
 
 Then("I should get a list of countries", function () {
-  const count = countryList.length;
-  console.log("Total countries:", count);
-
-  expect(count).toBeGreaterThan(0);
+  expect(Array.isArray(countryList)).toBeTruthy(); // checks countryList is an array
+  expect(countryList.length).toBeGreaterThan(0);
+  console.log(`Number of countries in region: ${countryList.length}`);
 });
