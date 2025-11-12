@@ -1,6 +1,15 @@
 @countries
-Feature: Countries in Europe
+Feature: Countries by region
 
-  Scenario: Count number of countries in Europe
-    When I fetch the region "europe"
+  Scenario Outline: Count number of countries in a region
+    When I fetch the region "<region>"
     Then I should get a list of countries
+
+    Examples:
+      | region     |
+      | africa     |
+      | americas   |
+      | asia       |
+      | europe     |
+      | oceania    |
+      | antarctic  |
