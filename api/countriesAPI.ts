@@ -9,17 +9,19 @@ export interface Country {
 }
 
 export class CountriesAPI extends BaseAPI {
+  private readonly apiURL = "https://restcountries.com/v3.1";
+
   async getCountriesByRegion(region: string): Promise<string[]> {
     await this.init();
-    const response: APIResponse = await this.get(`region/${region}`);
+    const url = `${this.apiURL}/region/${region}`;
+    const response: APIResponse = await this.get(url);
 
     if (!response.ok()) {
-      console.log(response);
+      console.error(await response.text());
       throw new Error(`Failed to fetch countries for region ${region}`);
     }
 
     const data = (await response.json()) as Country[];
-    // return only country names
     return data.map((c) => c.name.common);
   }
 }
