@@ -11,8 +11,4 @@ export class BaseAPI {
   async get(endpoint: string): Promise<APIResponse> {
     return this.apiContext.get(endpoint);
   }
-
-  async post(endpoint: string, data: object): Promise<APIResponse> {
-    return this.apiContext.post(endpoint, { data });
-  }
 }
