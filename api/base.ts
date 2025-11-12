@@ -2,16 +2,17 @@ import { request, APIRequestContext, APIResponse } from "@playwright/test";
 
 export class BaseAPI {
   protected apiContext!: APIRequestContext;
+  protected readonly baseURL = "https://restcountries.com/v3.1/";
 
   async init() {
-    this.apiContext = await request.newContext();
+    this.apiContext = await request.newContext({ baseURL: this.baseURL });
   }
 
-  async get(url: string): Promise<APIResponse> {
-    return this.apiContext.get(url);
+  async get(endpoint: string): Promise<APIResponse> {
+    return this.apiContext.get(endpoint);
   }
 
-  async post(url: string, data: object): Promise<APIResponse> {
-    return this.apiContext.post(url, { data });
+  async post(endpoint: string, data: object): Promise<APIResponse> {
+    return this.apiContext.post(endpoint, { data });
   }
 }

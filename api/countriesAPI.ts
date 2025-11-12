@@ -11,10 +11,10 @@ export interface Country {
 export class CountriesAPI extends BaseAPI {
   async getCountriesByRegion(region: string): Promise<string[]> {
     await this.init();
-    const url = `https://restcountries.com/v3.1/region/${region}`;
-    const response: APIResponse = await this.get(url);
+    const response: APIResponse = await this.get(`region/${region}`);
 
     if (!response.ok()) {
+      console.log(response);
       throw new Error(`Failed to fetch countries for region ${region}`);
     }
 
