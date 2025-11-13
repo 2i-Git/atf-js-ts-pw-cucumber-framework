@@ -8,16 +8,17 @@ maintained by 2i Testing.
 - TypeScript Playwright base configuration project
   - [Contents](#Contents)
   - [Using this Repo Template](#using-this-repo-template)
+    - [Pre-requisites](#pre-requisites)
     - [Using GitHub](#using-github)
     - [Using alternative Git repository](#using-alternative-git-repository)
   - [Install into existing project](#install-into-existing-project)
     - [npm modules](#npm-modules)
     - [Files](#files)
   - [VSCode extensions](#vscode-extensions)
-  - [Files](#files-1)
+  - [Configuration Files](#configuration-files)
     - [`eslint.config.js`](#eslintconfigjs)
       - [Rules Documentation](#rules-documentation)
-    - [`.prettier.config.js`](#prettierconfigjs)
+    - [`.prettierrc.json`](#prettierrconjson)
       - [Rules Documentation](#rules-documentation-1)
     - [`playwright.config.ts`](#playwrightconfigts)
       - [Documentation](#documentation)
@@ -25,13 +26,19 @@ maintained by 2i Testing.
       - [Documentation](#documentation-1)
       - [`baseUrl`](#baseurl)
       - [`paths` (Path Alias)](#paths-path-alias)
-    - [`cucumber.js`](#cucumberjs)
+    - [`cucumber.json`](#cucumberjson)
+  - [Commands](#commands)
+    - [Test Commands](#test-commands)
+    - [Tag Filtering Commands](#tag-filtering-commands)
+    - [Linting and Formatting Commands](#linting-and-formatting-commands)
   - [Folder Structure](#folder-structure)
     - [`api`](#api)
     - [`components`](#components)
+    - [`docs`](#docs)
     - [`features`](#features)
     - [`models`](#models)
     - [`pages`](#pages)
+    - [`reports`](#reports)
     - [`support`](#support)
   - [Cucumber (BDD) Integration](#cucumber-bdd-integration)
     - [Installation](#cucumber-installation)
@@ -44,13 +51,9 @@ maintained by 2i Testing.
       - [Write Simple Code](#write-simple-code)
       - [Guard Clauses](#guard-clauses)
   - [Code Snippets](#code-snippets)
-  - [Allure Report](#allure-reporting)
+  - [Allure Reporting](#allure-reporting)
+  - [Docker Support](#docker-support)
   - [Release Notes](#release-notes)
-    - [Docker Support](#docker-support)
-    - [Version 0.1](#version-01)
-    - [Version 0.2](#version-02)
-    - [Version 0.3](#version-03)
-    - [Version 0.4](#version-04)
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
@@ -60,14 +63,16 @@ maintained by 2i Testing.
 
 Before you begin, ensure you have the following installed on your system:
 
-- Node.js (version X.Y.Z or later)
+- Node.js (version 20.19 or later)
 - npm (comes bundled with Node.js)
+- Java (for Allure reporting)
 
 You can check if Node.js and npm are installed by running:
 
-```
+```bash
 node -v
 npm -v
+java -version
 ```
 
 If you don't see version numbers or get an error,
@@ -82,6 +87,15 @@ If you don't see version numbers or get an error,
 5. Run `npx playwright install`
 6. Finally, we can now run `npm run test` to start testing, this should pass and prove that
    everything is setup correctly
+
+### Using alternative Git repository
+
+Follow the same steps as [Using GitHub](#using-github), but clone from your preferred Git hosting
+service.
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## Install into existing project
 
 ### npm modules
 
@@ -110,10 +124,10 @@ npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
 Download the following files and **_merge_** them into the project.
 
 - [`eslint.config.js`](#eslintconfigjs)
-- [`.prettier.config.js`](#prettierconfig)
-- [`playwright.config.js`](#playwrightconfig)
-- [`tsconfig.json`](#tsconfig)
-- [`cucumber.js`](#cucumberjs) (if using Cucumber BDD)
+- [`.prettierrc.json`](#prettierrconjson)
+- [`playwright.config.ts`](#playwrightconfigts)
+- [`tsconfig.json`](#tsconfigjson)
+- [`cucumber.json`](#cucumberjson) (if using Cucumber BDD)
 
 Inside the package.json file add:
 
@@ -142,46 +156,17 @@ These extensions are required to allow VSCode to interact with the npm modules i
   - Alternatively search for `editor.formatOnSave` inside the Settings UI and check the box and it
     will then format the file whenever you press Save or `ctrl` + `S`
 - [Cucumber (Gherkin) Full Support](https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete)
-  (Optional - for BDD)
   - Provides syntax highlighting and autocomplete for `.feature` files
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
-## Files
+## Configuration Files
 
 - [`eslint.config.js`](#eslintconfigjs) - ESLint config
-- [`.prettier.config.js`](#prettierconfig) - Prettier config
-- [`playwright.config.js`](#playwrightconfig) - Playwright config
-- [`tsconfig.json`](#tsconfig) - Typescript config
-- [`cucumber.js`](#cucumberjs) - Cucumber config (for BDD testing)
-
-## Commands
-
-### Test Commands
-
-- `npm run test` - Run tests normally (console output only).
-- `npm run test:allure` - Run tests with Allure reporting enabled.
-- `npx cucumber-js` - Run Cucumber directly using the default profile. (Only useful if you need to
-  bypass npm scripts or debug the test runner.)
-- `npm run allure` - Generate and open Allure files after using tag filtering.
-
-### Tag Filtering Commands
-
-- `npm run test:allure -- --tags="@visa"` - Only runs scenarios with the `@smoke` tag
-- `npm run test:allure -- --tags="not @visa"` - Runs all scenarios except those tagged with `@wip`
-- `npm run test:allure -- --tags="@regression and @smoke"` - Runs scenarios with both tags
-
-Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually
-afterward.
-
-### Linting and Formatting Commands
-
-- `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
-  correctly without modifying them. Fails if formatting issues are found.
-- `npm run format:write` - Runs Prettier in write mode to automatically format your files in place
-  according to your Prettier configuration.
-
----
+- [`.prettierrc.json`](#prettierrconjson) - Prettier config
+- [`playwright.config.ts`](#playwrightconfigts) - Playwright config
+- [`tsconfig.json`](#tsconfigjson) - Typescript config
+- [`cucumber.json`](#cucumberjson) - Cucumber config (for BDD testing)
 
 ### `eslint.config.js`
 
@@ -190,7 +175,7 @@ Uses the `typescript-eslint` package to allow `ESLint` to lint Typescript files.
 #### [Rules Documentation](https://typescript-eslint.io/rules)
 
 Use the link above to find new rules.\
-Use `.prettier.config.js` for stylistic rules.\
+Use `.prettierrc.json` for stylistic rules.\
 The following rules have been implemented.
 
 - `"@typescript-eslint/no-floating-promises": ["error"]`
@@ -200,9 +185,9 @@ The following rules have been implemented.
 
 ---
 
-### `.prettier.config.js`
+### `.prettierrc.json`
 
-Used by the Prettier VSCode plugin to have consistant styling across all js/ts files.
+Used by the Prettier VSCode plugin to have consistent styling across all js/ts files.
 
 #### [Rules Documentation](https://prettier.io/docs/en/options)
 
@@ -247,6 +232,7 @@ TypeScript recognizes your step definitions:
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@api/*": ["api/*"],
       "@components/*": ["components/*"],
       "@models/*": ["models/*"],
       "@pages/*": ["pages/*"]
@@ -258,7 +244,7 @@ TypeScript recognizes your step definitions:
 
 ---
 
-### `cucumber.js`
+### `cucumber.json`
 
 Configuration file for Cucumber BDD testing. This file tells Cucumber where to find step
 definitions, how to run TypeScript files, and which reporters to use.
@@ -287,6 +273,46 @@ definitions, how to run TypeScript files, and which reporters to use.
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
+## Commands
+
+### Test Commands
+
+- `npm run test` - Run tests normally (console output only).
+- `npm run test:allure` - Run tests with Allure reporting enabled.
+- `npx cucumber-js` - Run Cucumber directly using the default profile. (Only useful if you need to
+  bypass npm scripts or debug the test runner.)
+- `npm run allure` - Generate and open Allure files after using tag filtering.
+- `npm run posttest` - Automatically runs after test to generate and open Allure report.
+- `npm run pretest` - Cleans `allure-report/` and `allure-results/` folders before tests.
+
+### Tag Filtering Commands
+
+- `npm run test:allure -- --tags="@smoke"` - Only runs scenarios with the `@smoke` tag
+- `npm run test:allure -- --tags="not @wip"` - Runs all scenarios except those tagged with `@wip`
+- `npm run test:allure -- --tags="@regression and @smoke"` - Runs scenarios with both tags
+
+Note: Tag-filtered runs do not auto-generate Allure reports - you must run `npm run allure` manually
+afterward.
+
+### Linting and Formatting Commands
+
+- `npm run format:check` - Runs Prettier in check mode to verify that your files are formatted
+  correctly without modifying them. Fails if formatting issues are found.
+- `npm run format:write` - Runs Prettier in write mode to automatically format your files in place
+  according to your Prettier configuration.
+- `npm run lint` - Runs ESLint across the project to detect code-quality or style issues.
+
+### Allure Commands
+
+- `npm run allure:generate` - Generates a static HTML report inside `allure-report/` from the latest
+  `allure-results/`.
+- `npm run allure:open` - Opens the generated Allure report in your default browser (requires Java
+  installed locally).
+- `npm run clean:reports` - Cleans all the folders of previous test `allure-report/` and
+  `allure-results/`.
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
 ## Folder Structure
 
 More information can be found in the `docs` folder in the
@@ -294,23 +320,16 @@ More information can be found in the `docs` folder in the
 
 ### `api`
 
-**Somehwere to store the api file related**
+**Somewhere to store the API files related**
 
-You got it. I'll integrate the `ApiLogger` information directly into the `helpers` section of the
-`Folder Structure` documentation.
-
-Here is the updated `### helpers` section for your README:
-
----
-
-- **`ApiLogger.ts`**: A utility for logging API requests and responses directly to the Allure report
+- **`apiLogger.ts`**: A utility for logging API requests and responses directly to the Allure report
   during BDD runs. It uses the Cucumber `world.attach` function to provide detailed debugging
   information for API steps.
 
 **Example `ApiLogger` usage in a step:**
 
 ```typescript
-import { ApiLogger } from "@helpers/ApiLogger";
+import { ApiLogger } from "@api/apiLogger";
 
 When("I make a POST request to {string}", async function (url: string) {
   const payload = { name: "Test User" };
@@ -327,13 +346,34 @@ When("I make a POST request to {string}", async function (url: string) {
 });
 ```
 
-**`Base.ts`**: set up the standar for any Api will be use for it
+- **`base.ts`**: Base API class that provides standard HTTP methods (GET, POST, PUT, DELETE) with
+  built-in logging to Allure reports.
+
+**Example `BaseAPI` usage:**
+
+```typescript
+import { BaseAPI } from "@api/base";
+
+Given("I fetch country data from the API", async function () {
+  const api = new BaseAPI(this);
+  await api.init();
+
+  const response = await api.get("https://restcountries.com/v3.1/all");
+  this.apiResponse = response;
+});
+```
 
 ### `components`
 
 **Somewhere to store Component Object Models (COMs)**
 
-By default, this folder contains a `BaseComponent` POM.
+By default, this folder contains a `base.ts` Component Object Model.
+
+### `docs`
+
+**Somewhere to store project documentation**
+
+Contains `project-structure.md` with detailed information about the project structure.
 
 ### `features`
 
@@ -342,9 +382,15 @@ By default, this folder contains a `BaseComponent` POM.
 This folder contains:
 
 - **`.feature` files** - Gherkin scenarios written in plain English that describe test cases
-- **`step_definitions/` or `steps/`** - TypeScript files that implement the steps from feature files
+- **`step_definitions/`** - TypeScript files that implement the steps from feature files
 
-**Example feature file** (`features/search/search.feature`):
+**Example feature files in your project:**
+
+- `countriesExample.feature` - API testing example with REST Countries API
+- `govSearch.feature` - GOV.UK search functionality testing
+- `wikipedia-search.feature` - Wikipedia search testing
+
+**Example feature file:**
 
 ```gherkin
 Feature: Search on GOV.UK
@@ -356,7 +402,13 @@ Feature: Search on GOV.UK
     Then I should see results containing "passport"
 ```
 
-**Example step definition** (`features/step_definitions/search.steps.ts`):
+**Example step definition files in your project:**
+
+- `countriesExample.steps.ts` - Step definitions for API testing
+- `govSearch.steps.ts` - Step definitions for GOV.UK search
+- `wikipedia.steps.ts` - Step definitions for Wikipedia search
+
+**Example step definition:**
 
 ```typescript
 import { Given, When, Then } from "@cucumber/cucumber";
@@ -369,19 +421,38 @@ Given("I open the GOV.UK homepage", async function () {
 });
 ```
 
-### `helpers`
-
-**Somewhere to store extra files such as helper functions**
-
 ### `models`
 
 **Somewhere to store data models, interfaces, types**
+
+Contains TypeScript interfaces and types used throughout the project.
+
+**Example files in your project:**
+
+- `wiki-data.ts` - Data models for Wikipedia testing
 
 ### `pages`
 
 **Somewhere to store Page Object Models (POMs)**
 
-By default, this folder contains a `BasePage` POM.
+By default, this folder contains a `base.ts` Page Object Model.
+
+**Example page objects in your project:**
+
+- `GovUKSearchPage.ts` - Page object for GOV.UK search functionality
+- `wikipedia.page.ts` - Page object for Wikipedia pages
+
+### `reports`
+
+**Auto-generated folder for test reports**
+
+Contains:
+
+- `allure-results/` - Raw test data in JSON format generated during test execution
+- `allure-report/` - Generated HTML report files
+
+**Note:** This folder is created automatically when running tests with Allure reporting enabled. It
+should be added to `.gitignore`.
 
 ### `support`
 
@@ -443,28 +514,8 @@ npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
 - `@cucumber/cucumber` - The Cucumber test runner
 - `ts-node` - Allows Cucumber to run `.ts` step files directly without compilation
 - `tsconfig-paths` - Makes Cucumber respect path aliases from `tsconfig.json` (e.g., `@pages/*`,
-  `@helpers/*`)
+  `@api/*`)
 - `allure-cucumberjs` - Cucumber formatter for Allure report generation
-
-### NPM Scripts for Cucumber
-
-Add these scripts to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "test": "cucumber-js --format progress --exit",
-    "test:allure": "cucumber-js --format progress --format allure-cucumberjs/reporter --exit",
-    "test:full": "npm run test:allure && npm run allure:generate && npm run allure:open",
-    "test:report": "npm run test:allure && npm run allure:serve"
-  }
-}
-```
-
-**Script descriptions:**
-
-- `test` - Runs Cucumber tests with progress output
-- `test:allure` - Runs tests and generates Allure-compatible results
 
 ### Running BDD Tests
 
@@ -519,7 +570,7 @@ npm run allure:open
 
 **Troubleshooting empty reports:**
 
-- Verify the formatter is `allure-cucumberjs/reporter` in `cucumber.js`
+- Verify the formatter is `allure-cucumberjs/reporter` in `cucumber.json`
 - Ensure at least one scenario ran successfully
 - Check that `allure-results/` is not blocked by OneDrive or corporate sync software
 
@@ -544,13 +595,13 @@ It is recommended to read and follow the TypeScript style guide which can be fou
 ### Filenames
 
 Filenames should be given in `kebab-case` (e.g. `messaging-thread-list-item.ts`) to give as much
-compatability as possible.
+compatibility as possible.
 
 ### Code Style
 
 #### Write Simple Code
 
-Try to not write long fuctions/methods by breaking them down into shorter functions and composing
+Try to not write long functions/methods by breaking them down into shorter functions and composing
 them together.
 
 #### Guard Clauses
@@ -577,7 +628,7 @@ To use:
 4. Start typing the code snippet
 5. Press 'Enter' to use
 
-Once run, the curser will have selected the class name for easy editing. Pressing 'TAB' will move to
+Once run, the cursor will have selected the class name for easy editing. Pressing 'TAB' will move to
 the bottom of the class to start adding locators and methods
 
 - Property/Method helper snippets
@@ -592,7 +643,7 @@ the bottom of the class to start adding locators and methods
 
 Properties default to using `this.page.locator` for POMs and `this.container.locator` in COMs,
 provided by their respective base classes. TABbing through starts with the property name, then
-`page`/`container`, then locator strategy, and finally that locater itself.
+`page`/`container`, then locator strategy, and finally that locator itself.
 
 Tabbing through methods start with the method name, then the arguments, then the body of the method.
 
@@ -606,12 +657,12 @@ Tabbing through methods start with the method name, then the arguments, then the
 
 Allure Reporting has been integrated into this framework to replace the default Playwright HTML
 reporter.  
-It provides an **interactive and visually rich** way to analyse your test runs, attachments, steps,
+It provides an **interactive and visually rich** way to analyze your test runs, attachments, steps,
 and failure details.
 
 ---
 
-## Installation
+### Installation
 
 Before running the commands below, ensure the required dependencies are installed:
 
@@ -629,24 +680,24 @@ npm install -D allure-playwright allure-commandline rimraf
 java -version
 ```
 
-## Available Scripts
+### Available Scripts
 
 | Command                   | Description                                                                                     |
 | ------------------------- | ----------------------------------------------------------------------------------------------- |
 | `npm run lint`            | Runs ESLint across the project to detect code-quality or style issues.                          |
 | `npm run format:write`    | Formats all code files automatically using Prettier.                                            |
 | `npm run format:check`    | Checks whether files follow Prettier formatting without modifying them.                         |
-| `npm run pretest `        | Cleans all the folder of previus test `allure-report/` and `allure-results/`                    |
+| `npm run pretest`         | Cleans all the folders of previous test `allure-report/` and `allure-results/`                  |
 | `npm run test`            | Runs all Cucumber scenarios with the standard progress formatter and allure.                    |
-| `npm run posttest`        | will run all the allure comand in onces Run tests and generate the report                       |
+| `npm run posttest`        | Automatically runs after test to generate and open the Allure report                            |
 | `npm run test:allure`     | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output. |
 | `npm run allure:generate` | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.       |
 | `npm run allure:open`     | Opens the generated Allure report in your default browser (requires Java installed locally).    |
-| `clean:reports `          | Cleans all the folder of previus test `allure-report/` and `allure-results/`                    |
+| `npm run clean:reports`   | Cleans all the folders of previous test `allure-report/` and `allure-results/`                  |
 
-## Usage Example
+### Usage Example
 
-### Run tests and generate the report
+#### Run tests and generate the report
 
 ```bash
 npm run test:allure
@@ -654,28 +705,32 @@ npm run allure:generate
 npm run allure:open
 ```
 
-### Clean reports manually
+#### Clean reports manually
 
 ```bash
 npm run clean:reports
 ```
 
-### Run the full cycle in one go
+#### Run the full cycle in one go
 
 ```bash
-npm run test:full
+npm run test
 ```
 
-### Clean the folders to do a need start
+This will automatically run `pretest` (clean), execute tests with Allure, then run `posttest`
+(generate and open report).
+
+#### Clean the folders to do a fresh start
 
 ```bash
 npm run pretest
+# or
 npm run clean:reports
 ```
 
 ---
 
-## Output Paths
+### Output Paths
 
 Reports are generated in:
 
@@ -684,17 +739,19 @@ Reports are generated in:
 ./allure-report/
 ```
 
-## Benefits
+### Benefits
 
 Allure provides detailed **step-by-step insights**, including:
 
 - Screenshots and traces
 - Execution history
 - Attachments and logs
+- API request/response logging (when using ApiLogger)
 
 This makes it ideal for **local debugging** and **CI/CD pipeline integration**.
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
 ## Docker Support
 
 ### Overview
@@ -780,7 +837,7 @@ Creates the reports directory structure to ensure Allure has a place to write re
 #### Default Command
 
 ```dockerfile
-CMD ["npm", "run", "test:full"]
+CMD ["npm", "run", "test"]
 ```
 
 Sets the default command to run when the container starts. This executes the full test suite with
@@ -814,13 +871,13 @@ docker run --rm playwright-tests
 
 ```bash
 # Run only smoke tests
-docker run --rm playwright-tests npm run test:smoke
+docker run --rm playwright-tests npm run test -- --tags "@smoke"
 
 # Run with specific Cucumber tags
 docker run --rm playwright-tests npx cucumber-js --tags "@govsearch"
 
-# Run Playwright tests in headed mode (requires X11 forwarding)
-docker run --rm playwright-tests npx playwright test --headed
+# Run with Allure reporting
+docker run --rm playwright-tests npm run test:allure
 ```
 
 #### Extract reports from the container:
@@ -875,28 +932,22 @@ This reduces build time and image size by excluding:
 - Version control files
 - OS-specific files
 
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
 ## Release Notes
 
-### Version 0.1
+### Version 0.5
 
-- Initial Release
-
-### Version 0.2
-
-- Added [Code Snippets](#code-snippets)
-- Updated README instructions with extra links to documentation
-
-### Version 0.3
-
-- [Code Snippets](#code-snippets)
-  - Added Test snippets
-  - Removed redundent snippets
-- Added [Style Guide](#style-guide)
-- Updated VSCode ESLint extension version
-- Updated README.md
-  - General cleanup
-  - Removed Barrelling advice to make tests run quicker
-    [More Info](https://dev.to/tassiofront/barrel-files-and-why-you-should-stop-using-them-now-bc4)
+- Added Cucumber (BDD) Integration
+  - Added `@cucumber/cucumber`, `ts-node`, `tsconfig-paths`, and `allure-cucumberjs` dependencies
+  - Added `cucumber.json` configuration file
+  - Added `features/` folder structure for feature files and step definitions
+  - Added `support/` folder for Cucumber World and hooks
+  - Updated `tsconfig.json` to include `features/**/*.ts`
+  - Added Cucumber-specific npm scripts
+  - Integrated Allure reporting for Cucumber runs
+  - Added API testing utilities with `apiLogger.ts` and `base.ts`
+  - Updated README with comprehensive Cucumber documentation
 
 ### Version 0.4
 
@@ -908,18 +959,4 @@ This reduces build time and image size by excluding:
   - Updated Playwright Test 1.44 > 1.54 (now requires Playwright 1.54)
   - Updated Node 20.12 > 20.19
   - Updated dotENV 16.4 > 16.6
-  - Updated Globals 15.1 > 15.15
-
-### Version 0.5
-
-- Added Cucumber (BDD) Integration
-  - Added `@cucumber/cucumber`, `ts-node`, `tsconfig-paths`, and `allure-cucumberjs` dependencies
-  - Added `cucumber.js` configuration file
-  - Added `features/` folder structure for feature files and step definitions
-  - Added `support/` folder for Cucumber World and hooks
-  - Updated `tsconfig.json` to include `features/**/*.ts`
-  - Added Cucumber-specific npm scripts
-  - Integrated Allure reporting for Cucumber runs
-  - Updated README with comprehensive Cucumber documentation
-
-<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+  - Updated Globals 15.
