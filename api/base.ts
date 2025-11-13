@@ -1,14 +1,20 @@
 import { request, APIRequestContext, APIResponse } from "@playwright/test";
-
+import { ApiLogger, WorldLike } from "./apiLogger";
 export class BaseAPI {
   protected apiContext!: APIRequestContext;
-
+  protected world: WorldLike;
+  constructor(world: WorldLike) {
+    this.world = world;
+  }
   async init() {
     this.apiContext = await request.newContext();
   }
 
   async get(url: string): Promise<APIResponse> {
-    return this.apiContext.get(url);
+    ApiLogger.logRequest(this.world, "GET", url);
+    const response = await this.apiContext.get(url);
+    await ApiLogger.logResponse(this.world, "GET", url, response);
+    return response;
   }
 
   async post(url: string, data: object): Promise<APIResponse> {
