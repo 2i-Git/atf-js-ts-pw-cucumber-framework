@@ -7,11 +7,13 @@
     "lint": "eslint .",
     "format:write": "prettier . --write",
     "format:check": "prettier . --check",
-    "test": "cucumber-js",
-    "test:allure": "cucumber-js -p allure",
+    "pretest": "npm run clean:reports",
+    "test": "cucumber-js -p allure",
+    "posttest": "npm run allure",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
-    "allure": "npm run allure:generate && npm run allure:open"
+    "allure": "npm run allure:generate && npm run allure:open",
+    "clean:reports": "rimraf allure-results allure-report"
   },
   "keywords": [],
   "author": "",
