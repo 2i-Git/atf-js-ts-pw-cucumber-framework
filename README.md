@@ -30,7 +30,6 @@ maintained by 2i Testing.
     - [`components`](#components)
     - [`enums`](#enums)
     - [`features`](#features)
-    - [`fixtures`](#fixtures)
     - [`helpers`](#helpers)
     - [`models`](#models)
     - [`pages`](#pages)
@@ -251,7 +250,6 @@ TypeScript recognizes your step definitions:
     "paths": {
       "@components/*": ["components/*"],
       "@enums/*": ["enums/*"],
-      "@fixtures/*": ["fixtures/*"],
       "@helpers/*": ["helpers/*"],
       "@models/*": ["models/*"],
       "@pages/*": ["pages/*"]
@@ -339,24 +337,6 @@ Given("I open the GOV.UK homepage", async function () {
   const govPage = new GovUKSearchPage(page);
   await govPage.goto();
 });
-```
-
-### `fixtures`
-
-**Somewhere to store fixtures**
-
-By default this comes with three files: `combined.ts`, `data.ts`, and `pages.ts`.
-
-`pages.ts` imports `test` from `data.ts` to allow you to use test data inside your page fixtures.
-
-`combined.ts` is the file to import into your `*.spec.ts` files as this is the end point of all the
-fixtures. It uses the `mergeTest` and `mergeExpect` functions from Playwright so you can have
-multiple branches, i.e. an admin branch and a user branch each with their own data.
-
-An example import into a spec file would be:
-
-```ts
-import { test, expect } from "@fixtures/combined";
 ```
 
 ### `helpers`
@@ -589,7 +569,6 @@ Tabbing through methods start with the method name, then the arguments, then the
 - Test snippets
   - `nftest` - Creates new test at cursor
   - `nftest-full` - Scaffolds new `*.spec.ts` file
-  - `nftestexpect-full` - Same as `nftest-full` plus imports `expect` from `@fixtures/combined`
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
