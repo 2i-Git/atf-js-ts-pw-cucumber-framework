@@ -27,10 +27,9 @@ maintained by 2i Testing.
       - [`paths` (Path Alias)](#paths-path-alias)
     - [`cucumber.js`](#cucumberjs)
   - [Folder Structure](#folder-structure)
+    - [`api`](#api)
     - [`components`](#components)
-    - [`enums`](#enums)
     - [`features`](#features)
-    - [`helpers`](#helpers)
     - [`models`](#models)
     - [`pages`](#pages)
     - [`support`](#support)
@@ -249,8 +248,6 @@ TypeScript recognizes your step definitions:
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
-      "@enums/*": ["enums/*"],
-      "@helpers/*": ["helpers/*"],
       "@models/*": ["models/*"],
       "@pages/*": ["pages/*"]
     }
@@ -295,15 +292,48 @@ definitions, how to run TypeScript files, and which reporters to use.
 More information can be found in the `docs` folder in the
 [`project-structure.md`](./docs/project-structure.md) file.
 
+### `api`
+
+**Somehwere to store the api file related**
+
+You got it. I'll integrate the `ApiLogger` information directly into the `helpers` section of the
+`Folder Structure` documentation.
+
+Here is the updated `### helpers` section for your README:
+
+---
+
+- **`ApiLogger.ts`**: A utility for logging API requests and responses directly to the Allure report
+  during BDD runs. It uses the Cucumber `world.attach` function to provide detailed debugging
+  information for API steps.
+
+**Example `ApiLogger` usage in a step:**
+
+```typescript
+import { ApiLogger } from "@helpers/ApiLogger";
+
+When("I make a POST request to {string}", async function (url: string) {
+  const payload = { name: "Test User" };
+
+  // Log the request
+  ApiLogger.logRequest(this, "POST", url, payload);
+
+  const response = await this.page.request.post(url, { data: payload });
+
+  // Log the response
+  await ApiLogger.logResponse(this, "POST", url, response);
+
+  this.apiResponse = response;
+});
+```
+
+**`Base.ts`**: set up the standar for any Api will be use for it
+
 ### `components`
 
 **Somewhere to store Component Object Models (COMs)**
 
 By default, this folder contains a `BaseComponent` POM.
-
-### `enums`
-
-**Somewhere to store Enumerated objects (enums)**
 
 ### `features`
 
