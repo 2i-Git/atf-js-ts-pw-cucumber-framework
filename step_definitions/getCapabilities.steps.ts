@@ -17,3 +17,8 @@ When("I request the GetCapabilities data", async function () {
 Then("I should receive a 200 status code", function () {
   expect(response.status()).toBe(200);
 });
+
+Then("I should see a list of capabilities", async function () {
+  const hasCapabilitiesTag = await airSensorAPI.hasCapabilitiesTag(response);
+  expect(hasCapabilitiesTag).toBeTruthy();
+});

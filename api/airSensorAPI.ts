@@ -17,4 +17,10 @@ export class AirSensorAPI extends BaseAPI {
 
     return response;
   }
+
+  // check the xml contains a <sos:Capabilities> tag
+  async hasCapabilitiesTag(response: APIResponse): Promise<boolean> {
+    const text = await response.text();
+    return text.includes("<sos:Capabilities");
+  }
 }
