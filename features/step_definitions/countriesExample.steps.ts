@@ -11,7 +11,6 @@ When("I fetch the region {string}", async function (region: string) {
   this.attach(`GET https://restcountries.com/v3.1/region/${region}`, "text/plain");
   countryList = await api.getCountriesByRegion(region);
   this.attach(JSON.stringify(countryList, null, 2), "application/json");
-
 });
 
 Then("I should get a list of countries", function () {
@@ -20,4 +19,3 @@ Then("I should get a list of countries", function () {
   console.log(`Number of countries in ${selectedRegion}: ${countryList.length}`);
   this.attach(`Number of countries in ${selectedRegion}: ${countryList.length}`, "text/plain");
 });
-

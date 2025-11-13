@@ -24,7 +24,6 @@ export class CustomWorld extends World {
     });
 
     this.page = await this.context.newPage();
-
   }
 
   async cleanup() {

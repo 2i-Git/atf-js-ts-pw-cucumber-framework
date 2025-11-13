@@ -5,12 +5,7 @@ export interface WorldLike {
 }
 // Utility class for logging API requests and responses
 export class ApiLogger {
-  static logRequest(
-    world: WorldLike,
-    method: string,
-    url: string,
-    payload?: unknown
-  ): void {
+  static logRequest(world: WorldLike, method: string, url: string, payload?: unknown): void {
     const requestInfo = {
       method: method.toUpperCase(),
       url,
@@ -38,16 +33,11 @@ export class ApiLogger {
     try {
       const bodyText = await response.text();
       const isJson = ApiLogger.isJson(bodyText);
-      const prettyBody = isJson
-        ? JSON.stringify(JSON.parse(bodyText), null, 2)
-        : bodyText;
+      const prettyBody = isJson ? JSON.stringify(JSON.parse(bodyText), null, 2) : bodyText;
 
       world.attach(prettyBody, isJson ? "application/json" : "text/plain");
     } catch (error) {
-      world.attach(
-        `Error reading response body: ${(error as Error).message}`,
-        "text/plain"
-      );
+      world.attach(`Error reading response body: ${(error as Error).message}`, "text/plain");
     }
   }
 
