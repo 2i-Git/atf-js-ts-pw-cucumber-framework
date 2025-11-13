@@ -2,23 +2,20 @@ import { APIResponse } from "@playwright/test";
 import { BaseAPI } from "./base";
 
 export class AirSensorAPI extends BaseAPI {
-  private readonly endpoint =
-    "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities";
+  endpoint: string;
 
-  // send request and check response
-  async getCapabilities(): Promise<APIResponse> {
-    await this.init();
-    const response = await this.get(this.endpoint);
-
-    if (!response.ok()) {
-      console.error(await response.text());
-      throw new Error(`Failed to fetch capabilities: ${response.status()}`);
-    }
-
-    return response;
+  constructor(endpoint?: string) {
+    super();
+    this.endpoint =
+      endpoint ||
+      "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities";
   }
 
-  // check the xml contains a <sos:Capabilities> tag
+  async getCapabilities(): Promise<APIResponse> {
+    await this.init();
+    return await this.get(this.endpoint);
+  }
+
   async hasCapabilitiesTag(response: APIResponse): Promise<boolean> {
     const text = await response.text();
     return text.includes("<sos:Capabilities");
