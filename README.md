@@ -601,17 +601,18 @@ java -version
 
 ## Available Scripts
 
-| Command                   | Description                                                                                           |
-| ------------------------- | ----------------------------------------------------------------------------------------------------- | --- |
-| Command                   | Description                                                                                           |
-| ------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `npm run lint`            | Runs ESLint across the project to detect code-quality or style issues.                                |
-| `npm run format:write`    | Formats all code files automatically using Prettier.                                                  |
-| `npm run format:check`    | Checks whether files follow Prettier formatting without modifying them.                               |
-| `npm run test`            | Runs all Cucumber scenarios with the standard progress formatter (no Allure).                         |
-| `npm run test:allure`     | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output.       |
-| `npm run allure:generate` | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.             |
-| `npm run allure:open`     | Opens the generated Allure report in your default browser (requires Java installed locally).          |     |
+| Command                   | Description                                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| `npm run lint`            | Runs ESLint across the project to detect code-quality or style issues.                          |
+| `npm run format:write`    | Formats all code files automatically using Prettier.                                            |
+| `npm run format:check`    | Checks whether files follow Prettier formatting without modifying them.                         |
+| `npm run pretest `        | Cleans all the folder of previus test `allure-report/` and `allure-results/`                    |
+| `npm run test`            | Runs all Cucumber scenarios with the standard progress formatter and allure.                    |
+| `npm run posttest`        | will run all the allure comand in onces Run tests and generate the report                       |
+| `npm run test:allure`     | Executes all Cucumber tests using the Allure reporter, producing `allure-results/` JSON output. |
+| `npm run allure:generate` | Generates a static HTML report inside `allure-report/` from the latest `allure-results/`.       |
+| `npm run allure:open`     | Opens the generated Allure report in your default browser (requires Java installed locally).    |
+| `clean:reports `          | Cleans all the folder of previus test `allure-report/` and `allure-results/`                    |
 
 ## Usage Example
 
@@ -633,6 +634,13 @@ npm run clean:reports
 
 ```bash
 npm run test:full
+```
+
+### Clean the folders to do a need start
+
+```bash
+npm run pretest
+npm run clean:reports
 ```
 
 ---
