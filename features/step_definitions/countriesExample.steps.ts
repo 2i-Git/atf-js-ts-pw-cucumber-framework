@@ -1,6 +1,6 @@
 import { When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import { CountriesAPI } from "../api/countriesAPI";
+import { CountriesAPI } from "../../api/countriesAPI";
 
 let countryList: string[];
 let selectedRegion: string;
