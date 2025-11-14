@@ -9,7 +9,6 @@
     "format:check": "prettier . --check",
     "pretest": "npm run clean:reports",
     "test": "cucumber-js -p allure",
-    "test:ci": "cucumber-js",
     "posttest": "npm run allure",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
