@@ -1,5 +1,5 @@
 import { request, APIRequestContext, APIResponse } from "@playwright/test";
-import { ApiLogger, WorldLike } from "./apiLogger";
+import { ApiLogger, WorldLike } from "../support/apiLogger";
 export class BaseAPI {
   protected apiContext!: APIRequestContext;
   protected world: WorldLike;

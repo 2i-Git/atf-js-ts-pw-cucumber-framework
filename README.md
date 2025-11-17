@@ -53,6 +53,7 @@ maintained by 2i Testing.
   - [Code Snippets](#code-snippets)
   - [Allure Reporting](#allure-reporting)
   - [Docker Support](#docker-support)
+  - [Automated Versioning (standard-version)](#automated-versioning-standard-version)
   - [Release Notes](#release-notes)
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
@@ -174,8 +175,8 @@ Uses the `typescript-eslint` package to allow `ESLint` to lint Typescript files.
 
 #### [Rules Documentation](https://typescript-eslint.io/rules)
 
-Use the link above to find new rules.\
-Use `.prettierrc.json` for stylistic rules.\
+Use the link above to find new rules.  
+Use `.prettierrc.json` for stylistic rules.  
 The following rules have been implemented.
 
 - `"@typescript-eslint/no-floating-promises": ["error"]`
@@ -205,8 +206,8 @@ Used by the Prettier VSCode plugin to have consistent styling across all js/ts f
 
 #### `baseUrl`
 
-Sets the base directory to resolve non-relative module names.\
-Defaults to `"."` (root folder).\
+Sets the base directory to resolve non-relative module names.  
+Defaults to `"."` (root folder).  
 **!!! DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING, THIS IS NOT THE BASEURL FOR THE WEBSITE YOU
 ARE TESTING !!!**
 
@@ -321,30 +322,6 @@ More information can be found in the `docs` folder in the
 ### `api`
 
 **Somewhere to store the API files related**
-
-- **`apiLogger.ts`**: A utility for logging API requests and responses directly to the Allure report
-  during BDD runs. It uses the Cucumber `world.attach` function to provide detailed debugging
-  information for API steps.
-
-**Example `ApiLogger` usage in a step:**
-
-```typescript
-import { ApiLogger } from "@api/apiLogger";
-
-When("I make a POST request to {string}", async function (url: string) {
-  const payload = { name: "Test User" };
-
-  // Log the request
-  ApiLogger.logRequest(this, "POST", url, payload);
-
-  const response = await this.page.request.post(url, { data: payload });
-
-  // Log the response
-  await ApiLogger.logResponse(this, "POST", url, response);
-
-  this.apiResponse = response;
-});
-```
 
 - **`base.ts`**: Base API class that provides standard HTTP methods (GET, POST, PUT, DELETE) with
   built-in logging to Allure reports.
@@ -464,6 +441,29 @@ This folder contains:
   each scenario has its own isolated browser setup
 - **`hooks.ts`** - Before and After hooks for setup/teardown, screenshot capture on failure, and
   Allure attachment
+- **`apiLogger.ts`**: A utility for logging API requests and responses directly to the Allure report
+  during BDD runs. It uses the Cucumber `world.attach` function to provide detailed debugging
+  information for API steps.
+
+- **`ApiLogger` usage in a step:**
+
+```typescript
+import { ApiLogger } from "@api/apiLogger";
+
+When("I make a POST request to {string}", async function (url: string) {
+  const payload = { name: "Test User" };
+
+  // Log the request
+  ApiLogger.logRequest(this, "POST", url, payload);
+
+  const response = await this.page.request.post(url, { data: payload });
+
+  // Log the response
+  await ApiLogger.logResponse(this, "POST", url, response);
+
+  this.apiResponse = response;
+});
+```
 
 **Example hooks file:**
 
@@ -931,6 +931,73 @@ This reduces build time and image size by excluding:
 - Previous test reports
 - Version control files
 - OS-specific files
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## Automated Versioning (standard-version)
+
+This project supports automated semantic versioning using **standard-version**.  
+It handles version bumps, generates a complete `CHANGELOG.md`, and creates Git tags.
+
+### Step 1 – Install
+
+```bash
+npm install --save-dev standard-version
+```
+
+Ensure your `package.json` contains a version field:
+
+```json
+{
+  "name": "js-ts-playwright-framework",
+  "version": "1.0.0"
+}
+```
+
+### Step 2 – Add release scripts
+
+Add the following to your `package.json`:
+
+```json
+"scripts": {
+  "lint": "eslint .",
+  "format:write": "prettier . --write",
+  "format:check": "prettier . --check",
+  "test": "cucumber-js --format progress",
+  "test:allure": "cross-env ALLURE_RESULTS_DIR=reports/allure-results cucumber-js --require-module ts-node/register --require-module tsconfig-paths/register --require 'support/**/*.ts' --require 'features/step_definitions/**/*.ts' --format progress --format allure-cucumberjs",
+  "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
+  "allure:open": "allure open reports/allure-report",
+
+  "release": "standard-version",
+  "release:minor": "standard-version --release-as minor",
+  "release:major": "standard-version --release-as major"
+}
+```
+
+### Step 3 – Cutting a release
+
+```bash
+npm run release
+```
+
+Or choose the type:
+
+```bash
+npm run release:minor
+npm run release:major
+```
+
+This will:
+
+- Update the version in `package.json`
+- Generate/update `CHANGELOG.md`
+- Create a Git tag (e.g., `v1.0.1`)
+
+Push the changes:
+
+```bash
+git push --follow-tags origin main
+```
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
