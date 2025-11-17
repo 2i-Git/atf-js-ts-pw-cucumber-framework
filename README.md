@@ -1088,6 +1088,49 @@ this.envName; // local | dev | test | preprod
 
 This allows the same step definitions and page objects to work seamlessly across all environments.
 
+### Service Endpoints (Wiki, Google, DEFRA)
+
+In addition to the main application `baseUrl` and `apiBaseUrl`, the framework also defines a set of
+external service endpoints used by the tests.  
+These services are listed under each environment so testers can clearly see all active connections
+and add new ones as required.
+
+The following services are currently defined:
+
+- **Wikipedia**  
+  `https://www.wikipedia.org`
+
+- **Google Search**  
+  `https://www.google.com`
+
+- **DEFRA Air API**  
+  `https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities`
+
+All environments (local, dev, test, preprod) use the same URLs for these services at present, but
+the configuration model allows each one to be customised independently in the future.
+
+Example structure:
+
+```ts
+services: {
+  wikiBaseUrl: "https://www.wikipedia.org",
+  googleBaseUrl: "https://www.google.com",
+  defraBaseUrl:
+    "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities"
+}
+```
+
+These service URLs are accessible inside Cucumber steps:
+
+```ts
+this.services.wikiBaseUrl;
+this.services.googleBaseUrl;
+this.services.defraBaseUrl;
+```
+
+This approach allows the framework to scale by supporting multiple tested systems without hardcoding
+URLs directly inside step definitions or page objects.
+
 ## Release Notes
 
 ### Version 0.5
