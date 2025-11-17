@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # .github/workflows/run-lint-checks.yml
+=======
+# # .github/workflows/run-lint-checks.yml
+>>>>>>> origin/main
 # name: Lint Check
 
 # on: [pull_request]
