@@ -1,70 +1,90 @@
 // config/env.config.ts
-// defines different test environments and exports the current one based on TEST_ENV env variable
+
 export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 
-// interface for service endpoints used in tests
-interface ServiceEndpoints {
-  wikiBaseUrl: string;
-  googleBaseUrl: string;
-  defraBaseUrl: string;
+export interface ServiceEndpoints {
+    wikiBaseUrl: string;
+    googleBaseUrl: string;
+    defraBaseUrl: string;
 }
-// interface for complete environment configuration
-interface EnvConfig {
-  name: TestEnvironment;
-  baseUrl: string;
-  apiBaseUrl?: string;
-  services: ServiceEndpoints;
+
+export interface EnvConfig {
+    name: TestEnvironment;
+    services: ServiceEndpoints;
 }
-// default service endpoints used across environments
-const DEFAULT_SERVICES: ServiceEndpoints = {
-  wikiBaseUrl: "https://www.wikipedia.org",
-  googleBaseUrl: "https://www.google.com",
-  defraBaseUrl: "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities",
+
+/**
+ * Per-environment hostnames for each application.
+ *
+ * For Wiki/Google these are the same in every env (public services).
+ * For DEFRA we model the pattern explicitly so we can change just the
+ * environment part later.
+ */
+
+// Wikipedia – same everywhere
+const WIKI_HOST = "https://www.wikipedia.org";
+
+// Google – same everywhere
+const GOOGLE_HOST = "https://www.google.com";
+
+// DEFRA per environment – for now all the same,
+// but THIS is where you’ll change the “mid URL” later.
+const DEFRA_HOSTS: Record<TestEnvironment, string> = {
+    local: "https://uk-air.defra.gov.uk",
+    dev: "https://uk-air.defra.gov.uk",
+    test: "https://uk-air.defra.gov.uk",
+    preprod: "https://uk-air.defra.gov.uk",
+
 };
 
-// mapping of environment names to their configurations
-const ENVIRONMENTS: Record<TestEnvironment, EnvConfig> = {
-  // define configurations for each environment
+/**
+ * Build the full service endpoints for a given environment.
+ * Think of this as turning:
+ *   https://envVar/.../component/feature
+ * into a real URL for the chosen env.
+ */
+function createServiceEndpoints(env: TestEnvironment): ServiceEndpoints {
+    const defraHost = DEFRA_HOSTS[env];
 
-  local: {
-    name: "local",
-    baseUrl: "http://localhost:3000",
-    apiBaseUrl: "http://localhost:3001",
-    services: DEFAULT_SERVICES,
-  },
+    return {
+        wikiBaseUrl: WIKI_HOST,
+        googleBaseUrl: GOOGLE_HOST,
+        defraBaseUrl:
+            `${defraHost}/data/sos/service?service=SOS&request=GetCapabilities`,
+    };
+}
 
-  dev: {
-    name: "dev",
-    baseUrl: "https://dev.yourapp.com",
-    apiBaseUrl: "https://dev-api.yourapp.com",
-    services: DEFAULT_SERVICES,
-  },
-  test: {
-    name: "test",
-    baseUrl: "https://test.yourapp.com",
-    apiBaseUrl: "https://test-api.yourapp.com",
-    services: DEFAULT_SERVICES,
-  },
-  preprod: {
-    name: "preprod",
-    baseUrl: "https://preprod.yourapp.com",
-    apiBaseUrl: "https://preprod-api.yourapp.com",
-    services: DEFAULT_SERVICES,
-  },
+// All environments, using the same pattern, just with different host maps if needed
+export const ENVIRONMENTS: Record<TestEnvironment, EnvConfig> = {
+    local: {
+        name: "local",
+        services: createServiceEndpoints("local"),
+    },
+    dev: {
+        name: "dev",
+        services: createServiceEndpoints("dev"),
+    },
+    test: {
+        name: "test",
+        services: createServiceEndpoints("test"),
+    },
+    preprod: {
+        name: "preprod",
+        services: createServiceEndpoints("preprod"),
+    },
 };
 
 function getEnvironmentName(): TestEnvironment {
-  const envVar = (process.env.TEST_ENV || "local").toLowerCase();
+    const raw = (process.env.TEST_ENV || "local").toLowerCase();
 
-  if (["local", "dev", "test", "preprod"].includes(envVar)) {
-    return envVar as TestEnvironment;
-  }
+    if (raw === "local" || raw === "dev" || raw === "test" || raw === "preprod") {
+        return raw;
+    }
 
-  console.warn(
-    `Unknown TEST_ENV "${envVar}", falling back to "local". ` +
-      `Valid values: local, dev, test, preprod`
-  );
-  return "local";
+    console.warn(
+        `Unknown TEST_ENV "${raw}", falling back to "local". Valid values: local, dev, test, preprod`,
+    );
+    return "local";
 }
 
-export const currentEnv = ENVIRONMENTS[getEnvironmentName()];
+export const currentEnv: EnvConfig = ENVIRONMENTS[getEnvironmentName()];
