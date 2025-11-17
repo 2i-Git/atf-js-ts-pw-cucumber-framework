@@ -10,6 +10,8 @@ module.exports = tseslint.config(
       "node_modules/",
       "playwright-report/",
       "eslint.config.cjs", // ignore self
+      "allure-report",
+      "allure-results"
     ],
   },
   {
