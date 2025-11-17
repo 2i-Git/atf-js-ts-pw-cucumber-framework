@@ -22,6 +22,7 @@ export class CustomWorld extends World {
     this.context = await this.browser.newContext({
       ignoreHTTPSErrors: true, // bypass cert verification
     });
+
     this.page = await this.context.newPage();
   }
 

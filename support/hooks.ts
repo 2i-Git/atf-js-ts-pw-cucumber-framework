@@ -8,7 +8,13 @@ Before(async function (this: CustomWorld) {
   await this.init();
 });
 
-// close playwright context and broswer after each scenario
+// close playwright context and broswer after each scenario and attach screenshot on failure
 After(async function (this: CustomWorld) {
+  // attach screenshot always
+  const screenshot = await this.page.screenshot();
+  this.attach(screenshot, "image/png");
+
+  // cleanup playwright objects
+
   await this.cleanup();
 });
