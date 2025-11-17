@@ -1,11 +1,12 @@
 import { APIResponse } from "@playwright/test";
 import { BaseAPI } from "./base";
+import { WorldLike } from "./apiLogger";
 
 export class AirSensorAPI extends BaseAPI {
   endpoint: string;
 
-  constructor(endpoint?: string) {
-    super();
+  constructor(world: WorldLike, endpoint?: string) {
+    super(world); // Pass the world object to BaseAPI
     this.endpoint =
       endpoint ||
       "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities";

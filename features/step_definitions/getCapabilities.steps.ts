@@ -7,7 +7,7 @@ import { AirSensorAPI } from "../../api/airSensorAPI";
 
 Given<CustomWorld>("I have the AIR SOS service endpoint", function () {
   // store AirSensorAPI on *this* world instance (not global)
-  this.airSensorAPI = new AirSensorAPI();
+  this.airSensorAPI = new AirSensorAPI(this);
 });
 
 When<CustomWorld>("I request the GetCapabilities data", async function () {
@@ -28,7 +28,7 @@ Then<CustomWorld>("I should see a list of capabilities", async function () {
 
 Given<CustomWorld>("I have an incorrect AIR SOS service endpoint", function () {
   // override with a broken endpoint URL
-  this.airSensorAPI = new AirSensorAPI("https://uk-air.defra.gov.uk/data/sos/servic");
+  this.airSensorAPI = new AirSensorAPI(this, "https://uk-air.defra.gov.uk/data/sos/servic");
 });
 
 Then<CustomWorld>("I should receive a 404 status code", function () {
