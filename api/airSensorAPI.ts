@@ -1,6 +1,6 @@
 import { APIResponse } from "@playwright/test";
 import { BaseAPI } from "./base";
-import { WorldLike } from "./apiLogger";
+import { WorldLike } from "../support/apiLogger";
 
 export class AirSensorAPI extends BaseAPI {
   endpoint: string;
