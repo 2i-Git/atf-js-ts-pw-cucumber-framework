@@ -1,6 +1,8 @@
 import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import { GovUKSearchPage } from "../pages/GovUKSearchPage";
+import { AirSensorAPI } from "api/airSensorAPI";
+import { APIResponse } from "@playwright/test";
 
 // each scenario gets its own instance of this class
 export class CustomWorld extends World {
@@ -9,6 +11,8 @@ export class CustomWorld extends World {
   context!: BrowserContext;
   page!: Page;
   govukPage!: GovUKSearchPage;
+  airSensorAPI!: AirSensorAPI;
+  response!: APIResponse;
 
   // takes cucumbers IWorldOptions object and initialises the base World class
   // enables access to cucumber utilities
