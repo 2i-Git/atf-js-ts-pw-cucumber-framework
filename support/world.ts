@@ -3,6 +3,7 @@ import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import { GovUKSearchPage } from "../pages/GovUKSearchPage";
 import { AirSensorAPI } from "api/airSensorAPI";
 import { APIResponse } from "@playwright/test";
+import { currentEnv, TestEnvironment } from "../config/env.config";
 
 // each scenario gets its own instance of this class
 export class CustomWorld extends World {
@@ -13,11 +14,14 @@ export class CustomWorld extends World {
   govukPage!: GovUKSearchPage;
   airSensorAPI!: AirSensorAPI;
   response!: APIResponse;
+  envName: TestEnvironment;
 
   // takes cucumbers IWorldOptions object and initialises the base World class
   // enables access to cucumber utilities
   constructor(options: IWorldOptions) {
     super(options);
+
+    this.envName = currentEnv.name;
   }
 
   // launches new playwright browser
