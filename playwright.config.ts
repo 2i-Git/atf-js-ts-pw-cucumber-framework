@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
+import { currentEnv } from "./config/env.config";
 
 // eslint-disable-next-line @/no-restricted-exports
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [["allure-playwright"]],
   use: {
+    baseURL: currentEnv.baseUrl,
     trace: process.env.CI ? "on-first-retry" : "on",
     headless: process.env.CI ? true : false,
     video: "retain-on-failure",

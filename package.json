@@ -1,6 +1,6 @@
 {
   "name": "js-ts-playwright-framework",
-  "version": "1.2.1",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,13 @@
     "clean:reports": "rimraf allure-results allure-report",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major"
+    "release:major": "standard-version --release-as major",
+    "test:local": "cross-env TEST_ENV=local npm run test",
+    "test:dev": "cross-env TEST_ENV=dev npm run test",
+    "test:test": "cross-env TEST_ENV=test npm run test",
+    "test:preprod": "cross-env TEST_ENV=preprod npm run test",
+    "test:allure:local": "cross-env TEST_ENV=local npm run test:allure",
+    "test:allure:dev": "cross-env TEST_ENV=dev npm run test:allure"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +38,7 @@
     "allure-commandline": "^2.34.1",
     "allure-cucumberjs": "^3.4.2",
     "allure-playwright": "^3.4.2",
+    "cross-env": "^10.1.0",
     "dotenv": "^16.6.1",
     "eslint": "^8.57.1",
     "globals": "^15.15.0",

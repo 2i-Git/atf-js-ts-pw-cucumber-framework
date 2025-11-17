@@ -1001,6 +1001,136 @@ git push --follow-tags origin main
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
+## Environment Selection (local, dev, test, preprod)
+
+This framework supports selecting the environment the tests should run against.  
+This makes it possible to execute the same test suite against different deployments of the
+application without changing the code.
+
+### Available environments
+
+The following environments are supported:
+
+- **local** – local developer machine
+- **dev** – development environment
+- **test** – QA/testing environment
+- **preprod** – pre-production environment
+
+The selected environment determines the `baseUrl` and `apiBaseUrl` used by both Playwright and API
+tests.
+
+### Configuration file
+
+Environment settings are stored in:
+
+```
+config/env.config.ts
+```
+
+Example structure:
+
+```ts
+const ENVIRONMENTS = {
+  local: {
+    name: "local",
+    baseUrl: "http://localhost:3000",
+    apiBaseUrl: "http://localhost:3001",
+  },
+  dev: {
+    name: "dev",
+    baseUrl: "https://placeholder.dev",
+    apiBaseUrl: "https://placeholder.dev/api",
+  },
+  test: {
+    name: "test",
+    baseUrl: "https://placeholder.test",
+    apiBaseUrl: "https://placeholder.test/api",
+  },
+  preprod: {
+    name: "preprod",
+    baseUrl: "https://placeholder.preprod",
+    apiBaseUrl: "https://placeholder.preprod/api",
+  },
+};
+```
+
+> **Note:**  
+> External services such as the public DEFRA API  
+> `https://uk-air.defra.gov.uk/...`  
+> do not belong in the environment config because they remain the same for all environments.
+
+### Running tests in a specific environment
+
+Environment selection is done using the `TEST_ENV` variable.
+
+Example scripts:
+
+```bash
+npm run test:local
+npm run test:dev
+npm run test:test
+npm run test:preprod
+```
+
+Or manually:
+
+```bash
+TEST_ENV=preprod npm run test
+```
+
+The environment settings are available inside Cucumber steps via the custom World:
+
+```ts
+this.baseUrl; // UI base URL for the selected environment
+this.apiBaseUrl; // API base URL for the selected environment
+this.envName; // local | dev | test | preprod
+```
+
+This allows the same step definitions and page objects to work seamlessly across all environments.
+
+### Service Endpoints (Wiki, Google, DEFRA)
+
+In addition to the main application `baseUrl` and `apiBaseUrl`, the framework also defines a set of
+external service endpoints used by the tests.  
+These services are listed under each environment so testers can clearly see all active connections
+and add new ones as required.
+
+The following services are currently defined:
+
+- **Wikipedia**  
+  `https://www.wikipedia.org`
+
+- **Google Search**  
+  `https://www.google.com`
+
+- **DEFRA Air API**  
+  `https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities`
+
+All environments (local, dev, test, preprod) use the same URLs for these services at present, but
+the configuration model allows each one to be customised independently in the future.
+
+Example structure:
+
+```ts
+services: {
+  wikiBaseUrl: "https://www.wikipedia.org",
+  googleBaseUrl: "https://www.google.com",
+  defraBaseUrl:
+    "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities"
+}
+```
+
+These service URLs are accessible inside Cucumber steps:
+
+```ts
+this.services.wikiBaseUrl;
+this.services.googleBaseUrl;
+this.services.defraBaseUrl;
+```
+
+This approach allows the framework to scale by supporting multiple tested systems without hardcoding
+URLs directly inside step definitions or page objects.
+
 ## Release Notes
 
 ### Version 0.5
