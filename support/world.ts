@@ -1,6 +1,7 @@
 import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import { AirSensorAPI } from "api/airSensorAPI";
+import { PetStoreAPI } from "api/petStoreAPI";
 import { APIResponse } from "@playwright/test";
 import { currentEnv, TestEnvironment } from "../config/env.config";
 
@@ -11,8 +12,16 @@ export class CustomWorld extends World {
   context!: BrowserContext;
   page!: Page;
   airSensorAPI!: AirSensorAPI;
+  petStoreAPI!: PetStoreAPI;
   response!: APIResponse;
   envName: TestEnvironment;
+
+  // Test data storage for scenarios
+  testData!: Record<string, unknown>;
+  testPetId!: number;
+  testOrderId!: number;
+  testUsername!: string;
+  testPassword!: string;
 
   // takes cucumbers IWorldOptions object and initialises the base World class
   // enables access to cucumber utilities

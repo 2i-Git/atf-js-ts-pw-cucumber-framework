@@ -18,14 +18,23 @@ export class BaseAPI {
   }
 
   async post(url: string, data: object): Promise<APIResponse> {
-    return this.apiContext.post(url, { data });
+    ApiLogger.logRequest(this.world, "POST", url, data);
+    const response = await this.apiContext.post(url, { data });
+    await ApiLogger.logResponse(this.world, "POST", url, response);
+    return response;
   }
 
   async put(url: string, data: object): Promise<APIResponse> {
-    return this.apiContext.put(url, { data });
+    ApiLogger.logRequest(this.world, "PUT", url, data);
+    const response = await this.apiContext.put(url, { data });
+    await ApiLogger.logResponse(this.world, "PUT", url, response);
+    return response;
   }
 
   async delete(url: string): Promise<APIResponse> {
-    return this.apiContext.delete(url);
+    ApiLogger.logRequest(this.world, "DELETE", url);
+    const response = await this.apiContext.delete(url);
+    await ApiLogger.logResponse(this.world, "DELETE", url, response);
+    return response;
   }
 }

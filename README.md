@@ -54,6 +54,14 @@ maintained by 2i Testing.
   - [Allure Reporting](#allure-reporting)
   - [Docker Support](#docker-support)
   - [Automated Versioning (standard-version)](#automated-versioning-standard-version)
+  - [Environment Selection (local, dev, test, preprod)](#environment-selection-local-dev-test-preprod)
+    - [Service Endpoints (Wiki, Google, DEFRA, PetStore)](#service-endpoints-wiki-google-defra-petstore)
+  - [PetStore API Testing Example](#petstore-api-testing-example)
+    - [Features](#features)
+    - [API Structure](#api-structure)
+    - [Running PetStore Tests](#running-petstore-tests)
+    - [API Logging with Environment Context](#api-logging-with-environment-context)
+    - [Enhanced API Logger](#enhanced-api-logger)
   - [Release Notes](#release-notes)
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
@@ -1088,23 +1096,26 @@ this.envName; // local | dev | test | preprod
 
 This allows the same step definitions and page objects to work seamlessly across all environments.
 
-### Service Endpoints (Wiki, Google, DEFRA)
+### Service Endpoints (Wiki, Google, DEFRA, PetStore)
 
 In addition to the main application `baseUrl` and `apiBaseUrl`, the framework also defines a set of
-external service endpoints used by the tests.  
+external service endpoints used by the tests.
 These services are listed under each environment so testers can clearly see all active connections
 and add new ones as required.
 
 The following services are currently defined:
 
-- **Wikipedia**  
+- **Wikipedia**
   `https://www.wikipedia.org`
 
-- **Google Search**  
+- **Google Search**
   `https://www.google.com`
 
-- **DEFRA Air API**  
+- **DEFRA Air API**
   `https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities`
+
+- **PetStore Swagger API**
+  `https://petstore.swagger.io/v2`
 
 All environments (local, dev, test, preprod) use the same URLs for these services at present, but
 the configuration model allows each one to be customised independently in the future.
@@ -1115,8 +1126,10 @@ Example structure:
 services: {
   wikiBaseUrl: "https://www.wikipedia.org",
   googleBaseUrl: "https://www.google.com",
+  defraHost: "https://uk-air.defra.gov.uk",
   defraBaseUrl:
-    "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities"
+    "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities",
+  petStoreBaseUrl: "https://petstore.swagger.io/v2"
 }
 ```
 
@@ -1126,12 +1139,224 @@ These service URLs are accessible inside Cucumber steps:
 this.services.wikiBaseUrl;
 this.services.googleBaseUrl;
 this.services.defraBaseUrl;
+this.services.petStoreBaseUrl;
 ```
 
 This approach allows the framework to scale by supporting multiple tested systems without hardcoding
 URLs directly inside step definitions or page objects.
 
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## PetStore API Testing Example
+
+The framework includes a complete example of API testing using the public Swagger PetStore API.
+This demonstrates best practices for API testing with Cucumber, environment configuration, and
+comprehensive logging.
+
+### Features
+
+- **Complete API wrapper** - TypeScript classes for Pet, Order, and User operations
+- **Environment-aware** - Uses the same environment configuration system as other tests
+- **Comprehensive logging** - All API requests and responses are logged to Allure reports with
+  environment context
+- **Type-safe** - Full TypeScript interfaces for all API models
+- **Cucumber integration** - Business-readable scenarios with reusable step definitions
+
+### Example Feature File
+
+Located at `features/petstore.feature`:
+
+```gherkin
+@petstore
+Feature: Petstore API Testing
+
+  Background:
+    Given Pet endpoint
+
+  Scenario: Create a new pet
+    When I add a new pet named "Patch"
+    Then the pet exists
+```
+
+### API Structure
+
+The PetStore API implementation is organized as follows:
+
+**`api/petStoreAPI.ts`** - Main API class with methods for:
+
+- **Pet operations**: `addPet()`, `updatePet()`, `getPetById()`, `findPetsByStatus()`,
+  `deletePet()`
+- **Store operations**: `getStoreInventory()`, `placeOrder()`, `getOrderById()`, `deleteOrder()`
+- **User operations**: `createUser()`, `getUserByUsername()`, `updateUser()`, `deleteUser()`,
+  `loginUser()`, `logoutUser()`
+
+All methods extend the `BaseAPI` class which provides HTTP methods with automatic logging.
+
+**Example usage in step definitions:**
+
+```typescript
+import { PetStoreAPI, Pet } from "../../api/petStoreAPI";
+
+When("I add a new pet named {string}", async function (petName: string) {
+  const pet: Pet = {
+    name: petName,
+    photoUrls: ["https://example.com/photo.jpg"],
+    status: "available",
+  };
+
+  this.response = await this.petStoreAPI.addPet(pet);
+  this.testData = await this.response.json();
+});
+```
+
+### Running PetStore Tests
+
+Run all PetStore tests:
+
+```bash
+npm test -- --tags @petstore
+```
+
+Run across different environments:
+
+```bash
+TEST_ENV=local npm test -- --tags @petstore
+TEST_ENV=dev npm test -- --tags @petstore
+```
+
+### API Logging with Environment Context
+
+All API calls made through `BaseAPI` (which `PetStoreAPI` extends) are automatically logged to
+Allure reports with rich context including:
+
+- **Environment name** - Which environment the test is running against (local, dev, test, preprod)
+- **Timestamp** - ISO 8601 timestamp of the request/response
+- **Request details** - HTTP method, URL, and request body
+- **Response details** - Status code, status text, and response body
+- **Formatted output** - JSON is pretty-printed for easy reading
+
+**Example API request log:**
+
+```json
+{
+  "environment": "local",
+  "timestamp": "2025-11-18T11:30:00.123Z",
+  "method": "POST",
+  "url": "https://petstore.swagger.io/v2/pet",
+  "body": {
+    "name": "Patch",
+    "photoUrls": ["https://example.com/photo.jpg"],
+    "status": "available"
+  }
+}
+```
+
+**Example API response log:**
+
+```json
+{
+  "environment": "local",
+  "timestamp": "2025-11-18T11:30:00.456Z",
+  "request": {
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet"
+  },
+  "response": {
+    "status": 200,
+    "statusText": "OK",
+    "ok": true,
+    "finalUrl": "https://petstore.swagger.io/v2/pet"
+  }
+}
+```
+
+The response body is also logged separately as formatted JSON or plain text.
+
+### Enhanced API Logger
+
+The `ApiLogger` class (`support/apiLogger.ts`) has been enhanced to automatically include
+environment information in all logs:
+
+**Key features:**
+
+- Automatically detects current environment from `world.envName`
+- Falls back to `currentEnv.name` if not available
+- Adds ISO 8601 timestamps to all requests and responses
+- Includes `statusText` for better error debugging
+- Works seamlessly with all HTTP methods (GET, POST, PUT, DELETE)
+
+**All HTTP methods in `BaseAPI` now include logging:**
+
+```typescript
+// GET request
+async get(url: string): Promise<APIResponse> {
+  ApiLogger.logRequest(this.world, "GET", url);
+  const response = await this.apiContext.get(url);
+  await ApiLogger.logResponse(this.world, "GET", url, response);
+  return response;
+}
+
+// POST request with body
+async post(url: string, data: object): Promise<APIResponse> {
+  ApiLogger.logRequest(this.world, "POST", url, data);
+  const response = await this.apiContext.post(url, { data });
+  await ApiLogger.logResponse(this.world, "POST", url, response);
+  return response;
+}
+```
+
+This ensures every API interaction is traceable in Allure reports with full environment context.
+
+### Benefits
+
+- **Debugging** - Quickly identify which environment an API call was made to
+- **Traceability** - Full audit trail of all API interactions
+- **Transparency** - Easy to see request/response payloads in Allure
+- **Multi-environment testing** - Clear separation of logs when running against different
+  environments
+
+<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
 ## Release Notes
+
+### Version 0.6
+
+- **PetStore API Testing Example**
+  - Added complete PetStore API implementation (`api/petStoreAPI.ts`)
+  - Created TypeScript interfaces for Pet, Order, and User models
+  - Implemented all major PetStore endpoints (Pet, Store, User operations)
+  - Added comprehensive Cucumber feature file (`features/petstore.feature`)
+  - Created step definitions for PetStore scenarios (`features/step_definitions/petstore.steps.ts`)
+  - Integrated with environment configuration system
+
+- **Enhanced API Logger with Environment Context**
+  - Updated `ApiLogger` to include environment name in all logs
+  - Added ISO 8601 timestamps to all API request/response logs
+  - Added `statusText` field to response logs for better debugging
+  - Extended `WorldLike` interface to support optional `envName` property
+  - Logs now show which environment (local/dev/test/preprod) each API call was made to
+
+- **Complete API Logging Coverage**
+  - Added logging to POST requests in `BaseAPI`
+  - Added logging to PUT requests in `BaseAPI`
+  - Added logging to DELETE requests in `BaseAPI`
+  - All HTTP methods (GET, POST, PUT, DELETE) now log requests and responses to Allure
+
+- **Environment Configuration Updates**
+  - Added PetStore API endpoint to `config/env.config.ts`
+  - Updated `ServiceEndpoints` interface to include `petStoreBaseUrl`
+  - Added `PETSTORE_HOST` constant for consistent endpoint configuration
+
+- **CustomWorld Enhancements**
+  - Added `petStoreAPI` property for PetStore API instance
+  - Added `testData` property for storing test response data
+  - Added test helper properties (`testPetId`, `testOrderId`, `testUsername`, `testPassword`)
+
+- **Documentation**
+  - Added comprehensive PetStore API Testing section to README
+  - Documented API Logger enhancements with environment context
+  - Added example API request/response logs with environment information
+  - Updated Service Endpoints documentation to include PetStore
 
 ### Version 0.5
 

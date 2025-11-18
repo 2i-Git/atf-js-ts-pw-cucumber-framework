@@ -1,7 +1,11 @@
 import { APIResponse } from "@playwright/test";
 import { BaseAPI } from "./base";
 import { WorldLike } from "../support/apiLogger";
+import { currentEnv } from "../config/env.config";
 
+// Extract just the base URL (without the path and query params)
+const baseHost = currentEnv.services.defraHost;
+const url = `${baseHost}/data/sos/service?service=SOS&request=GetCapabilities`;
 export class AirSensorAPI extends BaseAPI {
   endpoint: string;
 
@@ -9,7 +13,7 @@ export class AirSensorAPI extends BaseAPI {
     super(world); // Pass the world object to BaseAPI
     this.endpoint =
       endpoint ||
-      "https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities";
+      url;
   }
 
   async getCapabilities(): Promise<APIResponse> {

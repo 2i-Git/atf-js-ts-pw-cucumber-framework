@@ -1,12 +1,18 @@
 import type { APIResponse } from "@playwright/test";
+import { currentEnv } from "../config/env.config";
+
 // Define a minimal interface for the World object used in Cucumber steps
 export interface WorldLike {
   attach(data: string | Buffer, mediaType?: string): unknown;
+  envName?: string;
 }
+
 // Utility class for logging API requests and responses
 export class ApiLogger {
   static logRequest(world: WorldLike, method: string, url: string, payload?: unknown): void {
     const requestInfo = {
+      environment: world.envName || currentEnv.name,
+      timestamp: new Date().toISOString(),
       method: method.toUpperCase(),
       url,
       ...(payload ? { body: payload } : {}),
@@ -21,9 +27,12 @@ export class ApiLogger {
     response: APIResponse
   ): Promise<void> {
     const meta = {
+      environment: world.envName || currentEnv.name,
+      timestamp: new Date().toISOString(),
       request: { method: method.toUpperCase(), url },
       response: {
         status: response.status(),
+        statusText: response.statusText(),
         ok: response.ok(),
         finalUrl: response.url(),
       },
