@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { CustomWorld } from "support/world";
-import { GovLoginPage } from "../../pages/GovLoginPage";
+import { GovLoginPage } from "../../pages/2iGovLoginPage";
 import { getCredentialByRow } from "../../support/loginCredentialsLoader";
 
 Given("I am on the login page", async function (this: CustomWorld) {
