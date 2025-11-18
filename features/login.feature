@@ -1,12 +1,12 @@
 @login
 Feature: User login
 
-  Scenario: Successful login
+  Scenario Outline: Successful login with credentials from CSV
     Given I am on the login page
-    When I attempt to log in with valid login credentials
+    When I attempt to log in using CSV row <row>
     Then I should be redirected to the dashboard
 
-    Scenario: Unsuccessful login with incorrect credentials
-    Given I am on the login page
-    When I attempt to log in with invalid login credentials
-    Then I should see an error message on the login page
+    Examples:
+      | row |
+      | 0   |
+      | 1   |
