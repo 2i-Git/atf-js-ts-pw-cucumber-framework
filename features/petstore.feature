@@ -1,3 +1,4 @@
+@petstore
 Feature: PetStore - Add and find pet by ID
   The PetStore API should allow me to add a pet and retrieve it by ID.
 
