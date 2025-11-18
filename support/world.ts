@@ -1,6 +1,5 @@
 import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
-import { GovUKSearchPage } from "../pages/GovUKSearchPage";
 import { AirSensorAPI } from "api/airSensorAPI";
 import { PetStoreAPI } from "api/petStoreAPI";
 import { APIResponse } from "@playwright/test";
@@ -12,7 +11,6 @@ export class CustomWorld extends World {
   browser!: Browser;
   context!: BrowserContext;
   page!: Page;
-  govukPage!: GovUKSearchPage;
   airSensorAPI!: AirSensorAPI;
   petStoreAPI!: PetStoreAPI;
   response!: APIResponse;

@@ -95,4 +95,3 @@ function getEnvironmentName(): TestEnvironment {
 }
 
 export const currentEnv: EnvConfig = ENVIRONMENTS[getEnvironmentName()];
-
