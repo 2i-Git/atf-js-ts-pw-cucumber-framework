@@ -7,6 +7,7 @@ export interface ServiceEndpoints {
     googleBaseUrl: string;
     defraHost: string;
     defraBaseUrl: string;
+    petStoreBaseUrl: string;
 }
 
 export interface EnvConfig {
@@ -28,8 +29,11 @@ const WIKI_HOST = "https://www.wikipedia.org";
 // Google – same everywhere
 const GOOGLE_HOST = "https://www.google.com";
 
+// PetStore Swagger API – same everywhere (public demo API)
+const PETSTORE_HOST = "https://petstore.swagger.io/v2";
+
 // DEFRA per environment – for now all the same,
-// but THIS is where you’ll change the “mid URL” later.
+// but THIS is where you'll change the "mid URL" later.
 const DEFRA_HOSTS: Record<TestEnvironment, string> = {
     local: "https://uk-air.defra.gov.uk",
     dev: "https://uk-air.defra.gov.uk",
@@ -53,6 +57,7 @@ function createServiceEndpoints(env: TestEnvironment): ServiceEndpoints {
         defraHost: defraHost,
         defraBaseUrl:
             `${defraHost}/data/sos/service?service=SOS&request=GetCapabilities`,
+        petStoreBaseUrl: PETSTORE_HOST,
     };
 }
 
@@ -90,3 +95,4 @@ function getEnvironmentName(): TestEnvironment {
 }
 
 export const currentEnv: EnvConfig = ENVIRONMENTS[getEnvironmentName()];
+
