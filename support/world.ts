@@ -2,9 +2,6 @@ import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import { AirSensorAPI } from "api/airSensorAPI";
 import { APIResponse } from "@playwright/test";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // each scenario gets its own instance of this class
 export class CustomWorld extends World {
