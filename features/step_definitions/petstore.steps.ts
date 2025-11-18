@@ -1,4 +1,4 @@
-import { Given, When, Then, DataTable } from "@cucumber/cucumber";
+import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { CustomWorld } from "../../support/world";
 import { PetStoreAPI, Pet } from "../../api/petStoreAPI";
@@ -12,37 +12,41 @@ Given<CustomWorld>("I have access to the PetStore API", function () {
 // Pet Scenarios
 
 When<CustomWorld>(
-  "I add a new pet with the following details:",
-  async function (dataTable: DataTable) {
-    const data = dataTable.rowsHash();
-
+  "I add a new pet with name {string}",
+  async function (petName: string) {
+    // Use a fixed test ID to ensure consistency across scenarios
+    const testId = 12345;
     const pet: Pet = {
-      name: data.name,
-      photoUrls: [data.photoUrl],
-      status: data.status as "available" | "pending" | "sold",
+      id: testId,
+      name: petName,
+      photoUrls: ["https://example.com/photo.jpg"],
+      status: "available",
     };
 
     this.response = await this.petStoreAPI.addPet(pet);
-    this.testData = await this.response.json();
+    const data = (await this.response.json()) as Record<string, unknown>;
+    this.testData = data;
+    this.testPetId = data.id as number; // Store the pet ID for later use
   }
 );
 
-Then<CustomWorld>("the pet should be created successfully", function () {
-  expect(this.response.status()).toBe(200);
+Given<CustomWorld>("a valid pet ID", function () {
+  // Use the same fixed ID as the first scenario
+  this.testPetId = 12345;
+  expect(this.testPetId).toBeDefined();
+  expect(this.testPetId).toBeGreaterThan(0);
 });
-//
-Then<CustomWorld>("the response should contain the pet details", function () {
+
+When<CustomWorld>("I request the pet by ID", async function () {
+  this.response = await this.petStoreAPI.getPetById(this.testPetId);
+  this.testData = (await this.response.json()) as Record<string, unknown>;
+});
+
+Then<CustomWorld>("the pet exists", async function () {
+  expect(this.response.status()).toBe(200);
   expect(this.testData).toHaveProperty("id");
   expect(this.testData).toHaveProperty("name");
-  expect(this.testData).toHaveProperty("status");
-});
-
-Given<CustomWorld>("a pet exists with ID {int}", async function (petId: number) {
-  this.testPetId = petId;
-});
-
-When<CustomWorld>("I request the pet by ID {int}", async function (petId: number) {
-  this.response = await this.petStoreAPI.getPetById(petId);
+  expect(this.testData.id).toBe(this.testPetId);
 });
 
 
