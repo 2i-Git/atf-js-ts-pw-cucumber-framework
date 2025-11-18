@@ -5,6 +5,7 @@ export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 export interface ServiceEndpoints {
     wikiBaseUrl: string;
     googleBaseUrl: string;
+    defraHost: string;
     defraBaseUrl: string;
 }
 
@@ -49,6 +50,7 @@ function createServiceEndpoints(env: TestEnvironment): ServiceEndpoints {
     return {
         wikiBaseUrl: WIKI_HOST,
         googleBaseUrl: GOOGLE_HOST,
+        defraHost: defraHost,
         defraBaseUrl:
             `${defraHost}/data/sos/service?service=SOS&request=GetCapabilities`,
     };
