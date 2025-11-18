@@ -1,7 +1,6 @@
-# TypeScript Playwright base configuration project
+# TypeScript Playwright & Cucumebr base configuration project
 
-A template for new repositories using TypeScript Playwright, originally created by nFocus SDETs, now
-maintained by 2i Testing.
+A template for new repositories using TypeScript Playwright & Cucumber, created and maintained by 2i Testing.
 
 ## Contents
 
@@ -96,13 +95,6 @@ If you don't see version numbers or get an error,
 5. Run `npx playwright install`
 6. Finally, we can now run `npm run test` to start testing, this should pass and prove that
    everything is setup correctly
-
-### Using alternative Git repository
-
-Follow the same steps as [Using GitHub](#using-github), but clone from your preferred Git hosting
-service.
-
-<div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
 
 ## Install into existing project
 
@@ -386,6 +378,12 @@ Feature: Search on GOV.UK
     When I search for "passport"
     Then I should see results containing "passport"
 ```
+  Rules for Feature File
+  - Asslittle as possible as much as necessary
+  - No more than 5 lines (3 is optimum)
+  - One assertion per scenario
+  - Use 1st person throughout
+  - Given a situation, When I interact, Then I expect this
 
 **Example step definition files in your project:**
 
