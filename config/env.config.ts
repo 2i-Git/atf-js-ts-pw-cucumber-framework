@@ -3,8 +3,6 @@
 export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 
 export interface ServiceEndpoints {
-    wikiBaseUrl: string;
-    googleBaseUrl: string;
     defraHost: string;
     defraBaseUrl: string;
     petStoreBaseUrl: string;
@@ -23,11 +21,9 @@ export interface EnvConfig {
  * environment part later.
  */
 
-// Wikipedia – same everywhere
-const WIKI_HOST = "https://www.wikipedia.org";
 
-// Google – same everywhere
-const GOOGLE_HOST = "https://www.google.com";
+
+// PetStore Swagger API – same everywhere (public demo API)
 
 // PetStore Swagger API – same everywhere (public demo API)
 const PETSTORE_HOST = "https://petstore.swagger.io/v2";
@@ -52,8 +48,6 @@ function createServiceEndpoints(env: TestEnvironment): ServiceEndpoints {
     const defraHost = DEFRA_HOSTS[env];
 
     return {
-        wikiBaseUrl: WIKI_HOST,
-        googleBaseUrl: GOOGLE_HOST,
         defraHost: defraHost,
         defraBaseUrl:
             `${defraHost}/data/sos/service?service=SOS&request=GetCapabilities`,
