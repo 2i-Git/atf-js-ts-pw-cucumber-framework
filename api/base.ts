@@ -7,7 +7,15 @@ export class BaseAPI {
     this.world = world;
   }
   async init() {
-    this.apiContext = await request.newContext();
+    if (!this.apiContext) {
+      this.apiContext = await request.newContext();
+    }
+  }
+
+  async dispose() {
+    if (this.apiContext) {
+      await this.apiContext.dispose();
+    }
   }
 
   async get(url: string): Promise<APIResponse> {
