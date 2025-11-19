@@ -1,10 +1,13 @@
 import { Page } from "@playwright/test";
+import { BasePage } from "./base";
 
-export class GovLoginPage {
-  constructor(private page: Page) {}
+export class GovLoginPage extends BasePage {
+  constructor(page: Page) {
+    super(page);
+  }
 
   async goto() {
-    await this.page.goto("http://localhost:3000/login");
+    await super.goto("/login");
   }
 
   async enterUsername(username: string) {
@@ -26,7 +29,7 @@ export class GovLoginPage {
   }
 
   async waitForDashboard() {
-    await this.page.waitForURL("http://localhost:3000/personal-details");
+    await this.page.waitForURL(`${this.baseUrl}/personal-details`);
   }
 
   async getErrorMessage() {
