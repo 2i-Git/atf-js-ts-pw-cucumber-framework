@@ -1,7 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
 
-
 // eslint-disable-next-line @/no-restricted-exports
 export default defineConfig({
   testDir: "./tests",

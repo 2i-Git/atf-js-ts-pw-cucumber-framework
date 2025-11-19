@@ -3,40 +3,19 @@
 export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 
 export interface ServiceEndpoints {
-    defraHost: string;
-    defraBaseUrl: string;
-    petStoreBaseUrl: string;
+  petStoreBaseUrl: string;
 }
 
 export interface EnvConfig {
-    name: TestEnvironment;
-    services: ServiceEndpoints;
+  name: TestEnvironment;
+  services: ServiceEndpoints;
 }
-
-/**
- * Per-environment hostnames for each application.
- *
- * For Wiki/Google these are the same in every env (public services).
- * For DEFRA we model the pattern explicitly so we can change just the
- * environment part later.
- */
-
-
-
-// PetStore Swagger API – same everywhere (public demo API)
 
 // PetStore Swagger API – same everywhere (public demo API)
 const PETSTORE_HOST = "https://petstore.swagger.io/v2";
 
 // DEFRA per environment – for now all the same,
 // but THIS is where you'll change the "mid URL" later.
-const DEFRA_HOSTS: Record<TestEnvironment, string> = {
-    local: "https://uk-air.defra.gov.uk",
-    dev: "https://uk-air.defra.gov.uk",
-    test: "https://uk-air.defra.gov.uk",
-    preprod: "https://uk-air.defra.gov.uk",
-
-};
 
 /**
  * Build the full service endpoints for a given environment.
@@ -44,48 +23,50 @@ const DEFRA_HOSTS: Record<TestEnvironment, string> = {
  *   https://envVar/.../component/feature
  * into a real URL for the chosen env.
  */
-function createServiceEndpoints(env: TestEnvironment): ServiceEndpoints {
-    const defraHost = DEFRA_HOSTS[env];
 
-    return {
-        defraHost: defraHost,
-        defraBaseUrl:
-            `${defraHost}/data/sos/service?service=SOS&request=GetCapabilities`,
-        petStoreBaseUrl: PETSTORE_HOST,
-    };
+// createServiceEndpoints(env: TestEnvironment ) if you got different envs in the same api
+function createServiceEndpoints(): ServiceEndpoints {
+  return {
+    petStoreBaseUrl: PETSTORE_HOST,
+  };
 }
 
 // All environments, using the same pattern, just with different host maps if needed
 export const ENVIRONMENTS: Record<TestEnvironment, EnvConfig> = {
-    local: {
-        name: "local",
-        services: createServiceEndpoints("local"),
-    },
-    dev: {
-        name: "dev",
-        services: createServiceEndpoints("dev"),
-    },
-    test: {
-        name: "test",
-        services: createServiceEndpoints("test"),
-    },
-    preprod: {
-        name: "preprod",
-        services: createServiceEndpoints("preprod"),
-    },
+  local: {
+    name: "local",
+    //services: createServiceEndpoints("local"), // if you got different envs in the same api
+
+    services: createServiceEndpoints(),
+  },
+  dev: {
+    name: "dev",
+    //services: createServiceEndpoints("dev"), // if you got different envs in the same api
+    services: createServiceEndpoints(),
+  },
+  test: {
+    name: "test",
+    //services: createServiceEndpoints("test"), // if you got different envs in the same api
+    services: createServiceEndpoints(),
+  },
+  preprod: {
+    name: "preprod",
+    //services: createServiceEndpoints("preprod"), // if you got different envs in the same api
+    services: createServiceEndpoints(),
+  },
 };
 
 function getEnvironmentName(): TestEnvironment {
-    const raw = (process.env.TEST_ENV || "local").toLowerCase();
+  const raw = (process.env.TEST_ENV || "local").toLowerCase();
 
-    if (raw === "local" || raw === "dev" || raw === "test" || raw === "preprod") {
-        return raw;
-    }
+  if (raw === "local" || raw === "dev" || raw === "test" || raw === "preprod") {
+    return raw;
+  }
 
-    console.warn(
-        `Unknown TEST_ENV "${raw}", falling back to "local". Valid values: local, dev, test, preprod`,
-    );
-    return "local";
+  console.warn(
+    `Unknown TEST_ENV "${raw}", falling back to "local". Valid values: local, dev, test, preprod`
+  );
+  return "local";
 }
 
 export const currentEnv: EnvConfig = ENVIRONMENTS[getEnvironmentName()];
