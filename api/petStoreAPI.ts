@@ -2,43 +2,11 @@ import { APIResponse } from "@playwright/test";
 import { BaseAPI } from "./base";
 import { WorldLike } from "../support/apiLogger";
 import { currentEnv } from "../config/env.config";
+import { Pet, Order, User } from "../models/Petstore.models";
 
 const baseUrl = currentEnv.services.petStoreBaseUrl;
 
-export interface Pet {
-  id?: number;
-  category?: {
-    id?: number;
-    name?: string;
-  };
-  name: string;
-  photoUrls: string[];
-  tags?: Array<{
-    id?: number;
-    name?: string;
-  }>;
-  status?: "available" | "pending" | "sold";
-}
 
-export interface Order {
-  id?: number;
-  petId?: number;
-  quantity?: number;
-  shipDate?: string;
-  status?: "placed" | "approved" | "delivered";
-  complete?: boolean;
-}
-
-export interface User {
-  id?: number;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  userStatus?: number;
-}
 
 export class PetStoreAPI extends BaseAPI {
   baseUrl: string;

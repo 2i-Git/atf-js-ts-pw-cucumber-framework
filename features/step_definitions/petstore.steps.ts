@@ -1,7 +1,9 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { CustomWorld } from "../../support/world";
-import { PetStoreAPI, Pet } from "../../api/petStoreAPI";
+import { PetStoreAPI } from "../../api/petStoreAPI";
+import { generatePet, generateSimplePet } from "../../models/factories/Petstore.faker";
+import { Pet } from "../../models/Petstore.models"
 
 // Background
 
@@ -32,6 +34,28 @@ Given<CustomWorld>("a valid pet ID", function () {
   this.testPetId = 12345;
   expect(this.testPetId).toBeDefined();
   expect(this.testPetId).toBeGreaterThan(0);
+});
+
+// Additional Faker-based step definitions
+
+When<CustomWorld>("I add a completely randomized pet", async function () {
+  // Generate a fully randomized pet with all fields populated by Faker
+  const pet: Pet = generatePet();
+
+  this.response = await this.petStoreAPI.addPet(pet);
+  const data = (await this.response.json()) as Record<string, unknown>;
+  this.testData = data;
+  this.testPetId = data.id as number;
+});
+
+When<CustomWorld>("I add a simple pet", async function () {
+  // Generate a minimal pet with only required fields
+  const pet: Pet = generateSimplePet();
+
+  this.response = await this.petStoreAPI.addPet(pet);
+  const data = (await this.response.json()) as Record<string, unknown>;
+  this.testData = data;
+  this.testPetId = data.id as number;
 });
 
 When<CustomWorld>("I request the pet by ID", async function () {
