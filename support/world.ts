@@ -1,6 +1,6 @@
 import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
-import { PetStoreAPI } from "api/petStoreAPI";
+import { PetStoreAPI } from "../api/petStoreAPI";
 import { APIResponse } from "@playwright/test";
 
 import { currentEnv, TestEnvironment } from "../config/env.config";
@@ -35,9 +35,13 @@ export class CustomWorld extends World {
     this.browser = await chromium.launch({ headless: true });
     this.context = await this.browser.newContext({
       ignoreHTTPSErrors: true, // bypass cert verification
-    });
+    })
+      ;
 
     this.page = await this.context.newPage();
+    // Initialise the PetStoreAPI
+    this.petStoreAPI = new PetStoreAPI(this);
+    await this.petStoreAPI.init();
   }
 
   async cleanup() {
