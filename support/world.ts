@@ -2,6 +2,8 @@ import { IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import { PetStoreAPI } from "../api/petStoreAPI";
 import { APIResponse } from "@playwright/test";
+import { GovApplicationModel } from "../models/2iGovApplicationModel";
+import { GovApplicationAPI } from "../api/2iGovAppAPI";
 
 import { currentEnv, TestEnvironment } from "../config/env.config";
 
@@ -11,12 +13,21 @@ export class CustomWorld extends World {
   browser!: Browser;
   context!: BrowserContext;
   page!: Page;
+  envName: TestEnvironment;
+
+  // 2i Gov Application
+  govApplicationAPI?: GovApplicationAPI;
+  govApplication?: GovApplicationModel;
+  govApplicationId?: string | number;
+  testApplicationId?: number | string;
+
+  // API
   petStoreAPI!: PetStoreAPI;
   response!: APIResponse;
-  envName: TestEnvironment;
 
   // Test data storage for scenarios
   testData!: Record<string, unknown>;
+  responseBody?: Record<string, unknown>;
   testPetId!: number;
   testOrderId!: number;
   testUsername!: string;

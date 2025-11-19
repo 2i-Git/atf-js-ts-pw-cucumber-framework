@@ -1,5 +1,3 @@
-// config/env.config.ts
-
 export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 
 export interface UiEndpoints {
@@ -8,6 +6,7 @@ export interface UiEndpoints {
 
 export interface ServiceEndpoints {
   petStoreBaseUrl: string;
+  govAppAPIBaseUrl: string;
   ui: UiEndpoints;
 }
 
@@ -19,6 +18,7 @@ export interface EnvConfig {
 // PetStore Swagger API – same everywhere (public demo API)
 const PETSTORE_HOST = "https://petstore.swagger.io/v2";
 const GOVAPP_HOST = "http://localhost:3000";
+const GOVAPPAPI_HOST = "http://localhost:3000/api";
 
 /**
  * Build the full service endpoints for a given environment.
@@ -31,6 +31,7 @@ const GOVAPP_HOST = "http://localhost:3000";
 function createServiceEndpoints(): ServiceEndpoints {
   return {
     petStoreBaseUrl: PETSTORE_HOST,
+    govAppAPIBaseUrl: GOVAPPAPI_HOST,
     ui: {
       govAppUIBaseUrl: GOVAPP_HOST,
     },
