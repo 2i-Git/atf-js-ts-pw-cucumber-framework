@@ -1,9 +1,10 @@
-// pages/base.ts
 // This file contains the base class for all pages
 import { Page, Locator } from "@playwright/test";
+import { currentEnv } from "../config/env.config";
 
 export class BasePage {
   public page: Page;
+  public baseUrl: string;
 
   // Shared generic locators for pop-ups / cookies / banners
   readonly cookieAccept: Locator;
@@ -14,6 +15,7 @@ export class BasePage {
 
   constructor(page: Page) {
     this.page = page;
+    this.baseUrl = currentEnv.services.ui.govAppUIBaseUrl;
 
     // common pop-ups seen across multiple Wikipedia or other pages
     this.cookieAccept = page.locator("button:has-text('Accept all')");
@@ -23,7 +25,8 @@ export class BasePage {
     this.minimiseBtn = page.locator("button:has-text('minimize')");
   }
 
-  async goto(url: string) {
+  async goto(path: string) {
+    const url = `${this.baseUrl}${path}`;
     await this.page.goto(url, { waitUntil: "domcontentloaded" });
     await this.dismissOverlays();
   }

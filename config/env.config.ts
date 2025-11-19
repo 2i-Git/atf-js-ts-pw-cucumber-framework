@@ -2,8 +2,13 @@
 
 export type TestEnvironment = "local" | "dev" | "test" | "preprod";
 
+export interface UiEndpoints {
+  govAppUIBaseUrl: string;
+}
+
 export interface ServiceEndpoints {
   petStoreBaseUrl: string;
+  ui: UiEndpoints;
 }
 
 export interface EnvConfig {
@@ -13,9 +18,7 @@ export interface EnvConfig {
 
 // PetStore Swagger API – same everywhere (public demo API)
 const PETSTORE_HOST = "https://petstore.swagger.io/v2";
-
-// DEFRA per environment – for now all the same,
-// but THIS is where you'll change the "mid URL" later.
+const GOVAPP_HOST = "http://localhost:3000";
 
 /**
  * Build the full service endpoints for a given environment.
@@ -28,6 +31,9 @@ const PETSTORE_HOST = "https://petstore.swagger.io/v2";
 function createServiceEndpoints(): ServiceEndpoints {
   return {
     petStoreBaseUrl: PETSTORE_HOST,
+    ui: {
+      govAppUIBaseUrl: GOVAPP_HOST,
+    },
   };
 }
 
@@ -41,17 +47,17 @@ export const ENVIRONMENTS: Record<TestEnvironment, EnvConfig> = {
   },
   dev: {
     name: "dev",
-    //services: createServiceEndpoints("dev"), // if you got different envs in the same api
+    //services: createServiceEndpoints("dev"),
     services: createServiceEndpoints(),
   },
   test: {
     name: "test",
-    //services: createServiceEndpoints("test"), // if you got different envs in the same api
+    //services: createServiceEndpoints("test"),
     services: createServiceEndpoints(),
   },
   preprod: {
     name: "preprod",
-    //services: createServiceEndpoints("preprod"), // if you got different envs in the same api
+    //services: createServiceEndpoints("preprod"),
     services: createServiceEndpoints(),
   },
 };
