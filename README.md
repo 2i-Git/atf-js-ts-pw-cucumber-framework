@@ -1,6 +1,7 @@
 # TypeScript Playwright & Cucumebr base configuration project
 
-A template for new repositories using TypeScript Playwright & Cucumber, created and maintained by 2i Testing.
+A template for new repositories using TypeScript Playwright & Cucumber, created and maintained by 2i
+Testing.
 
 ## Contents
 
@@ -378,12 +379,14 @@ Feature: Search on GOV.UK
     When I search for "passport"
     Then I should see results containing "passport"
 ```
-  Rules for Feature File
-  - Asslittle as possible as much as necessary
-  - No more than 5 lines (3 is optimum)
-  - One assertion per scenario
-  - Use 1st person throughout
-  - Given a situation, When I interact, Then I expect this
+
+Rules for Feature File
+
+- Asslittle as possible as much as necessary
+- No more than 5 lines (3 is optimum)
+- One assertion per scenario
+- Use 1st person throughout
+- Given a situation, When I interact, Then I expect this
 
 **Example step definition files in your project:**
 
@@ -1097,23 +1100,19 @@ This allows the same step definitions and page objects to work seamlessly across
 ### Service Endpoints (Wiki, Google, DEFRA, PetStore)
 
 In addition to the main application `baseUrl` and `apiBaseUrl`, the framework also defines a set of
-external service endpoints used by the tests.
-These services are listed under each environment so testers can clearly see all active connections
-and add new ones as required.
+external service endpoints used by the tests. These services are listed under each environment so
+testers can clearly see all active connections and add new ones as required.
 
 The following services are currently defined:
 
-- **Wikipedia**
-  `https://www.wikipedia.org`
+- **Wikipedia** `https://www.wikipedia.org`
 
-- **Google Search**
-  `https://www.google.com`
+- **Google Search** `https://www.google.com`
 
 - **DEFRA Air API**
   `https://uk-air.defra.gov.uk/data/sos/service?service=SOS&request=GetCapabilities`
 
-- **PetStore Swagger API**
-  `https://petstore.swagger.io/v2`
+- **PetStore Swagger API** `https://petstore.swagger.io/v2`
 
 All environments (local, dev, test, preprod) use the same URLs for these services at present, but
 the configuration model allows each one to be customised independently in the future.
@@ -1147,8 +1146,8 @@ URLs directly inside step definitions or page objects.
 
 ## PetStore API Testing Example
 
-The framework includes a complete example of API testing using the public Swagger PetStore API.
-This demonstrates best practices for API testing with Cucumber, environment configuration, and
+The framework includes a complete example of API testing using the public Swagger PetStore API. This
+demonstrates best practices for API testing with Cucumber, environment configuration, and
 comprehensive logging.
 
 ### Features
@@ -1182,8 +1181,7 @@ The PetStore API implementation is organized as follows:
 
 **`api/petStoreAPI.ts`** - Main API class with methods for:
 
-- **Pet operations**: `addPet()`, `updatePet()`, `getPetById()`, `findPetsByStatus()`,
-  `deletePet()`
+- **Pet operations**: `addPet()`, `updatePet()`, `getPetById()`, `findPetsByStatus()`, `deletePet()`
 - **Store operations**: `getStoreInventory()`, `placeOrder()`, `getOrderById()`, `deleteOrder()`
 - **User operations**: `createUser()`, `getUserByUsername()`, `updateUser()`, `deleteUser()`,
   `loginUser()`, `logoutUser()`
