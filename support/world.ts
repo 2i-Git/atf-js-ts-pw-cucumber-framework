@@ -44,6 +44,11 @@ export class CustomWorld extends World {
     await this.page?.close();
     await this.context?.close();
     await this.browser?.close();
+
+    // Cleanup API context to prevent memory leaks
+    if (this.petStoreAPI) {
+      await this.petStoreAPI.dispose();
+    }
   }
 }
 
