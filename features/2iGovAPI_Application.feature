@@ -1,5 +1,5 @@
 @applications @create
-Feature: Create a new 2iGov API application successfully
+Feature: 2iGov API Application
   The Application API should allow creating a valid application.
 
   Background:
