@@ -1,5 +1,5 @@
 @login
-Feature: User login
+Feature: 2iGovUI User login
 
   Scenario Outline: 2iGovUI_Successful login with credentials from CSV
     Given I am on the login page
