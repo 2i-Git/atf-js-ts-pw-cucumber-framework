@@ -20,6 +20,7 @@ export class CustomWorld extends World {
   govApplication?: GovApplicationModel;
   govApplicationId?: string | number;
   testApplicationId?: number | string;
+  createdApplicationIds!: (string | number)[];
 
   // API
   petStoreAPI!: PetStoreAPI;
