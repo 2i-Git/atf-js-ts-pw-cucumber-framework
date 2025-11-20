@@ -1186,7 +1186,7 @@ The PetStore API implementation is organized as follows:
 - **User operations**: `createUser()`, `getUserByUsername()`, `updateUser()`, `deleteUser()`,
   `loginUser()`, `logoutUser()`
 
-All methods extend the `BaseAPI` class which provides HTTP methods with automatic logging.
+All methods extend the `BaseAPI` class which provides HTTP methods with automatic logging and proper resource cleanup to prevent memory leaks.
 
 **Example usage in step definitions:**
 
@@ -1204,6 +1204,112 @@ When("I add a new pet named {string}", async function (petName: string) {
   this.testData = await this.response.json();
 });
 ```
+
+### Faker Data Generation
+
+The framework includes **Faker.js integration** for generating randomized test data, making tests more realistic and eliminating the need to manually create test data.
+
+**Installation:**
+
+```bash
+npm install --save-dev @faker-js/faker
+```
+
+**Data Generator Location:**
+
+`models/factories/Petstore.faker.ts` - Contains functions for generating randomized Pet, Order, and User objects based on the official PetStore API schema.
+
+**Available Generator Functions:**
+
+#### `generatePet(overrides?)`
+Generates a fully randomized Pet with all fields populated:
+- Random ID (1-999,999)
+- Random category (Dogs, Cats, Birds, Fish, Reptiles, Small Pets)
+- Random animal name
+- 3 random photo URLs
+- 1-3 random tags (friendly, vaccinated, trained, etc.)
+- Random status (available, pending, sold)
+
+```typescript
+import { generatePet } from "../../models/factories/Petstore.faker";
+
+// Fully randomized pet
+const pet = generatePet();
+
+// Override specific fields while keeping others random
+const namedPet = generatePet({ name: "Fluffy", status: "available" });
+```
+
+#### `generateSimplePet(overrides?)`
+Generates a minimal Pet with only required fields (name and photoUrls):
+
+```typescript
+const simplePet = generateSimplePet();
+// Result: { name: "Dog", photoUrls: ["https://..."] }
+```
+
+#### `generatePetWithStatus(status, overrides?)`
+Generates a Pet with a specific status:
+
+```typescript
+const availablePet = generatePetWithStatus("available");
+```
+
+#### `generateUser(overrides?)` and `generateOrder(overrides?)`
+Generate randomized User and Order objects:
+
+```typescript
+const user = generateUser();
+// Result: Complete user with username, email, password, phone, etc.
+
+const order = generateOrder();
+// Result: Complete order with petId, quantity, shipDate, status, etc.
+```
+
+#### Bulk Generators
+Generate multiple randomized objects at once:
+
+```typescript
+const pets = generatePets(10);     // 10 random pets
+const users = generateUsers(5);    // 5 random users
+const orders = generateOrders(3);  // 3 random orders
+```
+
+#### Reproducible Test Data
+Use `seedFaker()` to generate the same "random" data every time (useful for debugging):
+
+```typescript
+import { seedFaker } from "../../models/factories/Petstore.faker";
+
+seedFaker(12345);  // Use same seed
+const pet1 = generatePet();  // Always generates the same pet
+```
+
+**Example in Cucumber Steps:**
+
+```typescript
+import { generatePet, generateSimplePet } from "../../models/factories/Petstore.faker";
+import { Pet } from "../../models/Petstore.models";
+
+When<CustomWorld>("I add a completely randomized pet", async function () {
+  const pet: Pet = generatePet();
+  this.response = await this.petStoreAPI.addPet(pet);
+  this.testData = await this.response.json();
+});
+
+When<CustomWorld>("I add a pet named {string}", async function (name: string) {
+  const pet: Pet = generatePet({ name });  // Random except name
+  this.response = await this.petStoreAPI.addPet(pet);
+  this.testData = await this.response.json();
+});
+```
+
+**Benefits:**
+- **Realistic test data** - Uses Faker's extensive library for names, URLs, dates, etc.
+- **Time-saving** - No need to manually create test objects
+- **Flexible** - Override any field while keeping others random
+- **Type-safe** - Full TypeScript support with proper interfaces
+- **Follows API spec** - Based on official PetStore Swagger schema
 
 ### Running PetStore Tests
 
@@ -1315,11 +1421,41 @@ This ensures every API interaction is traceable in Allure reports with full envi
 
 ## Release Notes
 
+### Version 0.7
+
+- **Critical P1 Memory Leak Fix**
+  - Fixed critical memory leak in API request context management
+  - Added `dispose()` method to `BaseAPI` class to properly clean up `APIRequestContext` instances
+  - Made `init()` method idempotent to prevent creating multiple contexts per API instance
+  - Added API context cleanup to `CustomWorld.cleanup()` method in `support/world.ts`
+  - Prevents HTTP connections, network sockets, and buffers from accumulating with each API call
+  - Eliminates potential "out of memory" errors in CI/CD with large test suites
+
+- **Faker.js Integration for Test Data Generation**
+  - Added `@faker-js/faker` dependency for randomized test data generation
+  - Created comprehensive data generators in `models/factories/Petstore.faker.ts`
+  - Implemented `generatePet()` for fully randomized Pet objects with all fields
+  - Implemented `generateSimplePet()` for minimal Pet objects (required fields only)
+  - Implemented `generatePetWithStatus()` for status-specific Pet generation
+  - Implemented `generateUser()` and `generateOrder()` for User and Order objects
+  - Added bulk generators: `generatePets()`, `generateUsers()`, `generateOrders()`
+  - Added `seedFaker()` for reproducible test data (debugging support)
+  - All generators support field overrides via optional parameters
+  - Based on official PetStore Swagger API schema for accuracy
+  - Updated step definitions to use Faker-generated data
+  - Added new Cucumber scenarios demonstrating Faker usage
+
+- **Documentation Updates**
+  - Added comprehensive Faker Data Generation section to README
+  - Documented memory leak fix and prevention measures
+  - Updated PetStore API Testing section with Faker examples
+  - Added usage examples for all Faker generator functions
+
 ### Version 0.6
 
 - **PetStore API Testing Example**
   - Added complete PetStore API implementation (`api/petStoreAPI.ts`)
-  - Created TypeScript interfaces for Pet, Order, and User models
+  - Created TypeScript interfaces for Pet, Order, and User models in `models/Petstore.models.ts`
   - Implemented all major PetStore endpoints (Pet, Store, User operations)
   - Added comprehensive Cucumber feature file (`features/petstore.feature`)
   - Created step definitions for PetStore scenarios (`features/step_definitions/petstore.steps.ts`)

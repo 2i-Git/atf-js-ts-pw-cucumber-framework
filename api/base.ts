@@ -6,12 +6,13 @@ export class BaseAPI {
   constructor(world: WorldLike) {
     this.world = world;
   }
+  // Initialize the API request context if not already initialized
   async init() {
     if (!this.apiContext) {
       this.apiContext = await request.newContext();
     }
   }
-
+  // Dispose of the API request context to prevent memory leaks
   async dispose() {
     if (this.apiContext) {
       await this.apiContext.dispose();

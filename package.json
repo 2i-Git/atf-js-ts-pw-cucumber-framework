@@ -30,6 +30,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.2.0",
     "@eslint/js": "^8.57.0",
+    "@faker-js/faker": "^10.1.0",
     "@playwright/test": "^1.56.1",
     "@types/cucumber": "^6.0.1",
     "@types/node": "^20.19.11",
