@@ -9,7 +9,7 @@ Given("I am on the login page", async function (this: CustomWorld) {
 });
 
 When(
-  "I attempt to log in using CSV row {int}",
+  "I log in with valid credentials {int}",
   async function (this: CustomWorld, rowIndex: number) {
     const login = new GovLoginPage(this.page);
     const { username, password } = getCredentialByRow(rowIndex);

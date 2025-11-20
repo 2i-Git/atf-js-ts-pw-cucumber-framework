@@ -56,6 +56,7 @@ Testing.
   - [Automated Versioning (standard-version)](#automated-versioning-standard-version)
   - [Environment Selection (local, dev, test, preprod)](#environment-selection-local-dev-test-preprod)
     - [Service Endpoints (Wiki, Google, DEFRA, PetStore)](#service-endpoints-wiki-google-defra-petstore)
+  - [2i Gov Application API Testing Example](#2i-gov-application-api-testing-example)
   - [PetStore API Testing Example](#petstore-api-testing-example)
     - [Features](#features)
     - [API Structure](#api-structure)
@@ -101,7 +102,20 @@ If you don't see version numbers or get an error,
 
 ### npm modules
 
-Run the following command to install the required npm modules:
+#### Complete Installation (All Dependencies)
+
+To install all dependencies at once, run:
+
+```bash
+npm install -D @playwright/test @types/node @eslint/js@8.57.0 eslint@8.57.0 typescript@5.4.5 typescript-eslint dotenv globals @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs allure-playwright allure-commandline cross-env @faker-js/faker prettier rimraf standard-version
+npm install csv-parse
+```
+
+#### Step-by-Step Installation
+
+Alternatively, install dependencies in groups:
+
+**1. Core Playwright & TypeScript:**
 
 ```bash
 npm install -D @playwright/test @types/node @eslint/js@8.57.0 eslint@8.57.0 typescript@5.4.5 typescript-eslint dotenv globals
@@ -113,13 +127,36 @@ Typescript-ESLint currently requires specific npm package versions:
 - @eslint/js - 8.57.0
 - typescript - 5.4.5
 
-#### Cucumber BDD Dependencies
-
-To use Cucumber for BDD testing, also install:
+**2. Cucumber BDD:**
 
 ```bash
-npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs
+npm install -D @cucumber/cucumber ts-node tsconfig-paths allure-cucumberjs cross-env
 ```
+
+**3. Allure Reporting:**
+
+```bash
+npm install -D allure-playwright allure-commandline rimraf
+```
+
+**4. Test Data & Utilities:**
+
+```bash
+npm install -D @faker-js/faker prettier standard-version
+npm install csv-parse
+```
+
+**What each dependency does:**
+
+- **@faker-js/faker** – generates realistic random test data
+- **prettier** – code formatter
+- **rimraf** – cross-platform file/folder removal tool
+- **standard-version** – automated versioning and changelog generation
+- **cross-env** – cross-platform environment variable setting
+- **csv-parse** – CSV file parsing for test data
+- **allure-playwright** – Allure integration for Playwright
+- **allure-commandline** – CLI for generating Allure reports
+- **allure-cucumberjs** – Allure integration for Cucumber
 
 ### Files
 
@@ -1143,6 +1180,96 @@ This approach allows the framework to scale by supporting multiple tested system
 URLs directly inside step definitions or page objects.
 
 <div style="text-align: right"><a href="#contents">Top ⬆️</a></div>
+
+## 2i Gov Application API Testing Example
+
+The framework includes API testing for the 2i Gov Application API, demonstrating CRUD operations (Create, Read, Update, Delete) for government application submissions.
+
+### Features
+
+- **Complete API wrapper** - TypeScript class for Application operations
+- **Environment-aware** - Uses the environment configuration system
+- **Comprehensive logging** - All API requests and responses are logged to Allure reports
+- **Type-safe** - Full TypeScript interfaces for application models
+- **Cucumber integration** - Business-readable scenarios with reusable step definitions
+- **Faker integration** - Random test data generation using the application builder
+
+### API Structure
+
+The 2i Gov Application API implementation is organized as follows:
+
+**`api/2iGovAppAPI.ts`** - Main API class with methods for:
+- **Application operations**: `createApplication()`, `getApplicationById()`, `deleteApplication()`, `getApplications()`
+
+All methods extend the `BaseAPI` class which provides HTTP methods with automatic logging and proper resource cleanup.
+
+**`support/2iGovApplicationBuilder.ts`** - Data builder using Faker for generating randomized applications
+
+**Example usage in step definitions:**
+
+```typescript
+import { GovApplicationAPI } from "../../api/2iGovAppAPI";
+import { buildValidApplication } from "../../support/2iGovApplicationBuilder";
+
+Given("I have access to the Application API", function () {
+  this.govApplicationAPI = new GovApplicationAPI(this);
+});
+
+When("I submit a valid application", async function () {
+  const application = buildValidApplication();
+  this.response = await this.govApplicationAPI!.createApplication(application);
+});
+```
+
+### Example Feature File
+
+Located at `features/2iGovAPI_Application.feature`:
+
+```gherkin
+@applications @create
+Feature: Create a new 2iGov API application successfully
+
+  Background:
+    Given I have access to the Application API
+
+  Scenario: 2iGovAPI_Successfully creating a valid application
+    When I submit a valid application
+    Then the application exists
+
+  @delete
+  Scenario: 2iGovAPI_Successfully deleting an application
+    Given an application exists
+    When I delete the application
+    Then the application should no longer exist
+
+  @retrieve
+  Scenario: 2iGovAPI_Successfully retrieving an application by ID
+    Given an application exists
+    When I request the application by its ID
+    Then I should receive the application details
+
+  @retrieve
+  Scenario: 2iGovAPI_Successfully retrieving all applications
+    Given multiple applications exist
+    When I request all applications
+    Then I should receive a list of all applications
+```
+
+### Running 2i Gov Application Tests
+
+Run all 2i Gov Application tests:
+
+```bash
+npm test -- --tags @applications
+```
+
+Run specific scenarios:
+
+```bash
+npm test -- --tags "@applications and @create"
+npm test -- --tags "@applications and @delete"
+npm test -- --tags "@applications and @retrieve"
+```
 
 ## PetStore API Testing Example
 

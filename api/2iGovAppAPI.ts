@@ -56,7 +56,40 @@ export interface CreateApplicationResponse {
     [key: string]: unknown;
   };
 }
+// Response Types
+export interface ApplicationData {
+  applicationId: number | string;
+  status: string;
+  personalDetails?: PersonalDetails;
+  businessDetails?: BusinessDetails;
+  licenseDetails?: LicenseDetails;
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+}
 
+
+export interface GetApplicationResponse {
+  success: boolean;
+  data: ApplicationData;
+  message?: string;
+}
+
+export interface GetApplicationsResponse {
+  success: boolean;
+  data: {
+    applications: ApplicationData[];
+    total: number;
+    limit: number;
+    offset: number;
+  };
+  message?: string;
+}
+
+export interface DeleteApplicationResponse {
+  success: boolean;
+  message?: string;
+}
 // API Client
 
 export class GovApplicationAPI extends BaseAPI {
@@ -104,3 +137,4 @@ export class GovApplicationAPI extends BaseAPI {
     return await this.get(url);
   }
 }
+

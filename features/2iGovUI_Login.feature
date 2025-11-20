@@ -1,9 +1,9 @@
 @login
 Feature: User login
 
-  Scenario Outline: Successful login with credentials from CSV
+  Scenario Outline: 2iGovUI_Successful login with credentials from CSV
     Given I am on the login page
-    When I attempt to log in using CSV row <row>
+    When I log in with valid credentials <row>
     Then I should be redirected to the dashboard
 
     Examples:
