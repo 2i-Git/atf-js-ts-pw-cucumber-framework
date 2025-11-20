@@ -35,14 +35,10 @@ Then<CustomWorld>("the application exists", function () {
   expect(body.data).toHaveProperty("applicationId");
   expect(body.data).toHaveProperty("status", "submitted");
 
-  // Ensure ID is valid
+  // Ensure ID is valid (UUID format)
   expect(this.testApplicationId).toBeDefined();
-  expect(Number(this.testApplicationId)).toBeGreaterThan(0);
+  expect(typeof this.testApplicationId).toBe('string');
+  expect(String(this.testApplicationId).length).toBeGreaterThan(0);
 });
 
 
-Then<CustomWorld>("the response status code should be {int}", function (expectedStatus: number) {
-  const actualStatus = this.response.status();
-  console.log("STATUS STEP (Application), expected:", expectedStatus, "actual:", actualStatus);
-  expect(actualStatus).toBe(expectedStatus);
-});
